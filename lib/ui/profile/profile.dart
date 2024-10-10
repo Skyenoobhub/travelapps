@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travelapp/home.dart';
 import 'package:travelapp/ui/trips/trips.dart';
+import 'biodata.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -13,13 +14,12 @@ class ProfilePage extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else if (index == 1) {
-      // Navigasi ke halaman Profile
+      // Navigasi ke halaman Trips
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const OpenTripPage()),
       );
     }
-    // index 1 adalah halaman Trips, sehingga tetap di halaman OpenTripPage
   }
 
   @override
@@ -43,7 +43,6 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bagian Pengaturan
               const Text(
                 'Pengaturan',
                 style: TextStyle(
@@ -54,7 +53,6 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Kategori Umum
               _buildSectionTitle('Umum', Icons.settings),
               _buildListTile('Biodata', Icons.person, context),
               _buildListTile('Histori', Icons.history, context),
@@ -64,7 +62,6 @@ class ProfilePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Kategori Bantuan
               _buildSectionTitle('Bantuan', Icons.help_outline),
               _buildListTile('Pertanyaan Umum', Icons.question_answer, context),
             ],
@@ -120,7 +117,14 @@ class ProfilePage extends StatelessWidget {
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
-        // Aksi ketika item ditekan
+        // Menavigasi ke halaman Biodata jika memilih opsi Biodata
+        if (title == 'Biodata') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const BiodataPage()),
+          );
+        }
+        // Tambahkan navigasi lain jika perlu
       },
     );
   }

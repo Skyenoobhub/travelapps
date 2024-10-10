@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class DetailTripPage extends StatelessWidget {
@@ -128,7 +127,7 @@ class DetailTripPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
               Text(
-                'IDR 350.000 /Pax',
+                'IDR 375.000 /Pax',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -175,14 +174,58 @@ class DetailTripPage extends StatelessWidget {
   Widget _buildItineraryTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(8.0),
-      child: const Text('Rincian perjalanan Fun Trekking Ciwidey ...', textAlign: TextAlign.justify),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            '• 06:30 Berangkat dari Meeting Point\n\n'
+            '  - Exit Tol Pasteur (Long Day Trip)\n'
+            '  - Exit Tol Buah Batu (Long Trip)\n'
+            '  - Exit Tol Soraja (Long Trip)\n\n'
+            '• 09:30 Ciwangun Indah Camp\n\n'
+            'Perkiraan Tiba di Base Camp CIC dan Persiapan untuk Melakukan Trekking\n\n'
+            '• 10:00 Start Trekking\n\n'
+            'Start Trekking dengan Rute melewati beberapa tempat :\n'
+            '      - Curug Putri\n'
+            '      - Curug Golosor\n'
+            '      - Curug Tilu\n'
+            '      - Hutan Pinus\n'
+            '      - Goa Tokek\n'
+            '      - Perkebunan Teh\n\n'
+            '• 15:00 Perjalanan menuju pusat oleh-oleh\n\n'
+            'Di tempat oleh-oleh ini banyak menjual makanan ringan yang sangat cocok dijadikan untuk oleh-oleh bagi orang terdekat\n\n'
+            '• 16:00 Perjalanan kembali ke Meeting Point\n\n'
+            'Perjalanan kembali ke meeting point, perkiraan tiba di meeting point terakhir jam 21:00 dan trip selesai.',
+            textAlign: TextAlign.justify,
+            style: TextStyle(height: 1.5),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildFacilitiesTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(8.0),
-      child: const Text('Fasilitas yang disediakan selama Fun Trekking Ciwidey ...', textAlign: TextAlign.justify),
+      child: const Text(
+        'Paket Tour Termasuk:\n\n'
+        '- Transportasi dengan Bus/Hiace White Horse\n'
+        '- Driver, BBM, Tol & Parkir\n'
+        '- Tiket masuk Ciwangun Indah Camp\n'
+        '- Kunjungan Curug Putri\n'
+        '- Kunjungan Curug Tilu\n'
+        '- Kunjungan Hutan Pinus\n'
+        '- Kunjungan Goa Tokek\n'
+        '- Kunjungan Perkebunan Teh\n'
+        '- Guide Lokal selama Trekking\n'
+        '- Tour Leader\n\n'
+        'Paket Tour Tidak Termasuk :\n\n'
+        '- Penambahan Destinasi diluar Program\n'
+        '- Pengeluaran Keperluan Pribadi Selama Perjalanan\n'
+        '- Tipping Tour Leader dan Driver\n',
+        textAlign: TextAlign.justify,
+        style: TextStyle(height: 1.5),
+      ),
     );
   }
 }
