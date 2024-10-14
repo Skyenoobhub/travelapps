@@ -57,7 +57,6 @@ class ProfilePage extends StatelessWidget {
               _buildListTile('Biodata', Icons.person, context),
               _buildListTile('Histori', Icons.history, context),
               _buildListTile('Favorit', Icons.favorite, context),
-              _buildListTile('Bahasa', Icons.language, context),
               _buildNotificationTile(),
 
               const SizedBox(height: 20),

@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,10 +154,10 @@ class _HomePageState extends State<HomePage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildTripCard("Sunrise Ranca Upas", "#jalanluluaja", "IDR 325.000", "assets/images/sunrise_ranca_upas.jpg"),
-                    _buildTripCard("Tangkuban Perahu", "#jalanluluaja", "IDR 275.000", "assets/images/tangkuban_perahu.jpg"),
-                    _buildTripCard("Stone Garden", "#jalanluluaja", "IDR 225.000", "assets/images/stone_garden.jpg"),
-                    _buildTripCard("Gunung Putri", "#jalanluluaja", "IDR 475.000", "assets/images/gunung_putri.jpg"),
+                    _buildTripCard("Sunrise Ranca Upas", "IDR 325.000", "assets/images/sunrise_ranca_upas.jpg"),
+                    _buildTripCard("Tangkuban Perahu", "IDR 275.000", "assets/images/tangkuban_perahu.jpg"),
+                    _buildTripCard("Stone Garden", "IDR 225.000", "assets/images/stone_garden.jpg"),
+                    _buildTripCard("Gunung Putri", "IDR 475.000", "assets/images/gunung_putri.jpg"),
                   ],
                 ),
               ),
@@ -183,10 +184,10 @@ class _HomePageState extends State<HomePage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildTripCard("Trekking Kawah Ratu", "21 Telah Berangkat", "IDR 350.000", "assets/images/kawah_ratu.jpg"),
-                    _buildTripCard("Pangalengan", "12 Telah Berangkat", "IDR 350.000", "assets/images/pangalengan.jpg"),
-                    _buildTripCard("Kota Lama Bandung", "15 Telah Berangkat", "IDR 350.000", "assets/images/kota_lama_bandung.jpg"),
-                    _buildTripCard("Trekking Ciwangun", "12 Telah Berangkat", "IDR 350.000", "assets/images/ciwangun.jpg"),
+                    _buildTripCard("Trekking Kawah Ratu", "IDR 350.000", "assets/images/kawah_ratu.jpg"),
+                    _buildTripCard("Pangalengan", "IDR 350.000", "assets/images/pangalengan.jpg"),
+                    _buildTripCard("Kota Lama Bandung", "IDR 350.000", "assets/images/kota_lama_bandung.jpg"),
+                    _buildTripCard("Trekking Ciwangun", "IDR 350.000", "assets/images/ciwangun.jpg"),
                   ],
                 ),
               ),
@@ -233,8 +234,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget untuk kartu perjalanan (trip card)
-  Widget _buildTripCard(String title, String subtitle, String price, String imagePath) {
+  // Widget untuk kartu perjalanan (trip card) tanpa subtitle
+  Widget _buildTripCard(String title, String price, String imagePath) {
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 10),
@@ -272,8 +273,6 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 5),
-                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                 const SizedBox(height: 5),
                 Text(price, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ],

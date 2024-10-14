@@ -23,14 +23,14 @@ class OpenTripPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trips = [
-      {"name": "Fun Trekking Ciwangun", "duration": "2 Hari 1 Malam", "price": "IDR 350.000", "image": "assets/images/ciwangun.jpg"},
-      {"name": "Tangkuban Perahu", "duration": "2 Hari 1 Malam", "price": "IDR 275.000", "image": "assets/images/tangkuban_perahu.jpg"},
-      {"name": "Sunrise Ranca Upas", "duration": "2 Hari 1 Malam", "price": "IDR 325.000", "image": "assets/images/sunrise_ranca_upas.jpg"},
-      {"name": "Kota Lama Bandung", "duration": "2 Hari 1 Malam", "price": "IDR 350.000", "image": "assets/images/kota_lama_bandung.jpg"},
-      {"name": "Pangalengan Adventure", "duration": "2 Hari 1 Malam", "price": "IDR 350.000", "image": "assets/images/pangalengan.jpg"},
-      {"name": "Sunrise Gunung Putri", "duration": "2 Hari 1 Malam", "price": "IDR 475.000", "image": "assets/images/gunung_putri.jpg"},
-      {"name": "Stone Garden", "duration": "1 Hari 0 Malam", "price": "IDR 250.000", "image": "assets/images/stone_garden.jpg"},
-      {"name": "Kawah Ratu", "duration": "1 Hari 0 Malam", "price": "IDR 400.000", "image": "assets/images/kawah_ratu.jpg"},
+      {"name": "Fun Trekking Ciwangun", "price": "IDR 350.000", "image": "assets/images/ciwangun.jpg"},
+      {"name": "Tangkuban Perahu", "price": "IDR 275.000", "image": "assets/images/tangkuban_perahu.jpg"},
+      {"name": "Sunrise Ranca Upas", "price": "IDR 325.000", "image": "assets/images/sunrise_ranca_upas.jpg"},
+      {"name": "Kota Lama Bandung", "price": "IDR 350.000", "image": "assets/images/kota_lama_bandung.jpg"},
+      {"name": "Pangalengan Adventure", "price": "IDR 350.000", "image": "assets/images/pangalengan.jpg"},
+      {"name": "Sunrise Gunung Putri", "price": "IDR 475.000", "image": "assets/images/gunung_putri.jpg"},
+      {"name": "Stone Garden", "price": "IDR 250.000", "image": "assets/images/stone_garden.jpg"},
+      {"name": "Kawah Ratu", "price": "IDR 400.000", "image": "assets/images/kawah_ratu.jpg"},
     ];
 
     return Scaffold(
@@ -126,7 +126,6 @@ class OpenTripPage extends StatelessWidget {
                   final trip = trips[index];
                   return _buildTripCard(
                     trip["name"]!,
-                    trip["duration"]!,
                     trip["price"]!,
                     trip["image"]!,
                     context,
@@ -158,7 +157,7 @@ class OpenTripPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTripCard(String name, String duration, String price, String imagePath, BuildContext context) {
+  Widget _buildTripCard(String name, String price, String imagePath, BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (name == "Fun Trekking Ciwangun") {
@@ -202,8 +201,6 @@ class OpenTripPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 5),
-                  Text(duration, style: const TextStyle(color: Colors.brown, fontSize: 12, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 5),
                   Text(price, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
