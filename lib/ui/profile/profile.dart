@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:travelapp/home.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 import 'biodata.dart';
+import 'favorite_page.dart'; // Import FavoritePage
+import 'history_page.dart'; // Import HistoryPage
+import 'faq_page.dart'; // Import FAQPage
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -32,7 +35,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout), // Ikon logout
             onPressed: () {
-              // Aksi logout
+              _showLogoutDialog(context); // Show the logout dialog
             },
           ),
         ],
@@ -55,14 +58,14 @@ class ProfilePage extends StatelessWidget {
 
               _buildSectionTitle('Umum', Icons.settings),
               _buildListTile('Biodata', Icons.person, context),
-              _buildListTile('Histori', Icons.history, context),
-              _buildListTile('Favorit', Icons.favorite, context),
+              _buildListTile('Histori', Icons.history, context), // Now navigates to HistoryPage
+              _buildListTile('Favorit', Icons.favorite, context), // List item for Favorit
               _buildNotificationTile(),
 
               const SizedBox(height: 20),
 
               _buildSectionTitle('Bantuan', Icons.help_outline),
-              _buildListTile('Pertanyaan Umum', Icons.question_answer, context),
+              _buildListTile('Pertanyaan Umum', Icons.question_answer, context), // List item for FAQ
             ],
           ),
         ),
@@ -85,6 +88,84 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Keluar',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Apakah Anda yakin ingin keluar?',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();  // Close the dialog without logging out
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Text(
+                          'Tidak',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();  // Close the dialog and perform logout
+                        // Add logout functionality here
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Text(
+                          'Keluar',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -122,8 +203,28 @@ class ProfilePage extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => const BiodataPage()),
           );
+        } 
+        // Navigasi ke halaman Histori jika memilih opsi Histori
+        else if (title == 'Histori') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HistoryPage()), // Navigate to HistoryPage
+          );
+        } 
+        // Navigasi ke halaman Favorit jika memilih opsi Favorit
+        else if (title == 'Favorit') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FavoritePage()), // Navigate to FavoritePage
+          );
         }
-        // Tambahkan navigasi lain jika perlu
+        // Navigasi ke halaman Pertanyaan Umum jika memilih opsi Pertanyaan Umum
+        else if (title == 'Pertanyaan Umum') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FAQPage()), // Navigate to FAQPage
+          );
+        }
       },
     );
   }
