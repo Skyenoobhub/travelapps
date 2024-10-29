@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelapp/home.dart';
+import 'package:travelapp/ui/login/login.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 import 'biodata.dart';
 import 'favorite_page.dart'; // Import FavoritePage
@@ -7,21 +8,27 @@ import 'history_page.dart'; // Import HistoryPage
 import 'faq_page.dart'; // Import FAQPage
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final String userName; // Add this line
+
+  const ProfilePage({super.key, required this.userName});
 
   void _navigateToPage(int index, BuildContext context) {
-    if (index == 0) {
-      // Navigasi ke halaman Explore
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } else if (index == 1) {
-      // Navigasi ke halaman Trips
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OpenTripPage()),
-      );
+    switch (index) {
+      case 0:
+        // Navigate to Explore page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage(userName: userName)),
+        );
+        break;
+      case 1:
+        // Navigate to Trips page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OpenTripPage(userName: userName)),
+        );
+        break;
     }
   }
 
@@ -29,11 +36,11 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D47A1), // Warna latar belakang AppBar
+        backgroundColor: const Color(0xFF0D47A1), // AppBar background color
         title: const Text('Profil'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout), // Ikon logout
+            icon: const Icon(Icons.logout), // Logout icon
             onPressed: () {
               _showLogoutDialog(context); // Show the logout dialog
             },
@@ -55,23 +62,20 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
               _buildSectionTitle('Umum', Icons.settings),
               _buildListTile('Biodata', Icons.person, context),
-              _buildListTile('Histori', Icons.history, context), // Now navigates to HistoryPage
-              _buildListTile('Favorit', Icons.favorite, context), // List item for Favorit
+              _buildListTile('Histori', Icons.history, context),
+              _buildListTile('Favorit', Icons.favorite, context),
               _buildNotificationTile(),
-
               const SizedBox(height: 20),
-
               _buildSectionTitle('Bantuan', Icons.help_outline),
-              _buildListTile('Pertanyaan Umum', Icons.question_answer, context), // List item for FAQ
+              _buildListTile('Pertanyaan Umum', Icons.question_answer, context),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Ini menandai halaman "Profil"
+        currentIndex: 2, // Marks "Profil" page
         onTap: (index) => _navigateToPage(index, context),
         items: const [
           BottomNavigationBarItem(
@@ -114,9 +118,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text(
                   'Apakah Anda yakin ingin keluar?',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -124,7 +126,7 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();  // Close the dialog without logging out
+                        Navigator.of(context).pop(); // Close dialog
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -133,7 +135,8 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Text(
                           'Tidak',
                           style: TextStyle(color: Colors.white, fontSize: 16),
@@ -142,8 +145,11 @@ class ProfilePage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();  // Close the dialog and perform logout
-                        // Add logout functionality here
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -152,7 +158,8 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Text(
                           'Keluar',
                           style: TextStyle(color: Colors.white, fontSize: 16),
@@ -169,7 +176,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Widget untuk menampilkan judul setiap kategori
+  // Widget for section title
   Widget _buildSectionTitle(String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -190,54 +197,48 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Widget untuk menampilkan ListTile untuk setiap item pengaturan
+  // Widget for each setting ListTile
   Widget _buildListTile(String title, IconData icon, BuildContext context) {
     return ListTile(
       leading: Icon(icon, color: Colors.black87),
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {
-        // Menavigasi ke halaman Biodata jika memilih opsi Biodata
+        // Navigate based on the title selected
         if (title == 'Biodata') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const BiodataPage()),
           );
-        } 
-        // Navigasi ke halaman Histori jika memilih opsi Histori
-        else if (title == 'Histori') {
+        } else if (title == 'Histori') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HistoryPage()), // Navigate to HistoryPage
+            MaterialPageRoute(builder: (context) => const HistoryPage()),
           );
-        } 
-        // Navigasi ke halaman Favorit jika memilih opsi Favorit
-        else if (title == 'Favorit') {
+        } else if (title == 'Favorit') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const FavoritePage()), // Navigate to FavoritePage
+            MaterialPageRoute(builder: (context) => const FavoritePage()),
           );
-        }
-        // Navigasi ke halaman Pertanyaan Umum jika memilih opsi Pertanyaan Umum
-        else if (title == 'Pertanyaan Umum') {
+        } else if (title == 'Pertanyaan Umum') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const FAQPage()), // Navigate to FAQPage
+            MaterialPageRoute(builder: (context) => const FAQPage()),
           );
         }
       },
     );
   }
 
-  // Widget untuk tile pemberitahuan dengan Switch
+  // Widget for notification tile with Switch
   Widget _buildNotificationTile() {
     return ListTile(
       leading: const Icon(Icons.notifications, color: Colors.black87),
       title: const Text('Pemberitahuan'),
       trailing: Switch(
-        value: true, // Atur nilai switch
+        value: true, // Set switch value
         onChanged: (value) {
-          // Aksi ketika switch diubah
+          // Action when switch changes
         },
       ),
     );

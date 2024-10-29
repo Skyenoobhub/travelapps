@@ -10,19 +10,24 @@ class FAQPage extends StatelessWidget {
     final faqs = [
       {
         "question": "Apa itu Open Trip?",
-        "answer": "Open Trip adalah layanan perjalanan yang dapat diikuti oleh siapa saja tanpa harus mengumpulkan kelompok sendiri."
+        "answer":
+            "Open Trip adalah layanan perjalanan yang dapat diikuti oleh siapa saja tanpa harus mengumpulkan kelompok sendiri."
       },
       {
         "question": "Di daerah mana PT Jalan Dulu Asia?",
-        "answer": "PT Jalan Dulu Asia beroperasi di berbagai daerah di Indonesia, terutama di tempat-tempat wisata populer."
+        "answer":
+            "PT Jalan Dulu Asia beroperasi di berbagai daerah di Indonesia, terutama di tempat-tempat wisata populer."
       },
       {
         "question": "Siapa saja yang bisa menggunakan jasa Open Trip?",
-        "answer": "Siapapun bisa menggunakan jasa Open Trip, baik individu, keluarga, maupun kelompok kecil."
+        "answer":
+            "Siapapun bisa menggunakan jasa Open Trip, baik individu, keluarga, maupun kelompok kecil."
       },
       {
-        "question": "Apa yang membedakan PT Jalan Dulu Asia dari kompetitor lain di industri yang sama?",
-        "answer": "PT Jalan Dulu Asia menawarkan pengalaman perjalanan yang unik dengan fokus pada kenyamanan dan pengalaman lokal."
+        "question":
+            "Apa yang membedakan PT Jalan Dulu Asia dari kompetitor lain di industri yang sama?",
+        "answer":
+            "PT Jalan Dulu Asia menawarkan pengalaman perjalanan yang unik dengan fokus pada kenyamanan dan pengalaman lokal."
       },
     ];
 

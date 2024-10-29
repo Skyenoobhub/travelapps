@@ -1,18 +1,50 @@
+// ignore_for_file: use_super_parameters, prefer_const_declarations, avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:travelapp/ui/profile/profile.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String userName;
+
+  const HomePage({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0; // Menyimpan indeks halaman aktif
+  int _currentIndex = 0; // Store the active page index
+  List<Map<String, dynamic>> _tripPackages = []; // Store trip packages from API
 
-  // Fungsi untuk navigasi ke halaman berdasarkan index
+  // Function to fetch trip packages from API
+  Future<void> _fetchTripPackages() async {
+    final url = 'http://10.0.2.2/backend/detail.php'; // Update to your API URL
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          _tripPackages = List<Map<String, dynamic>>.from(data['data']);
+        });
+      } else {
+        print('Failed to load trip packages');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTripPackages(); // Fetch trip packages when the page loads
+  }
+
+  // Function to navigate to the page based on the index
   void _navigateToPage(int index) {
     if (index == _currentIndex) return;
 
@@ -23,12 +55,18 @@ class _HomePageState extends State<HomePage> {
     if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OpenTripPage()),
+        MaterialPageRoute(
+          builder: (context) =>
+              OpenTripPage(userName: widget.userName), // Pass username
+        ),
       );
     } else if (index == 2) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(
+          builder: (context) =>
+              ProfilePage(userName: widget.userName), // Pass username
+        ),
       );
     }
   }
@@ -50,9 +88,10 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.notifications_none, color: Colors.blue),
+                  icon:
+                      const Icon(Icons.notifications_none, color: Colors.blue),
                   onPressed: () {
-                    // Aksi notifikasi
+                    // Notification action
                   },
                 ),
                 const SizedBox(width: 10),
@@ -66,17 +105,17 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      backgroundColor: const Color(0xFFF5F5F5), // Latar belakang abu-abu muda
+      backgroundColor: const Color(0xFFF5F5F5), // Light gray background
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bagian Header
-              const Text(
-                'Halo!',
-                style: TextStyle(fontSize: 16, color: Colors.black87),
+              // Header Section
+              Text(
+                'Halo, ${widget.userName}!', // Personalized greeting
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
               ),
               const Text(
                 'Ayo Jalan-Jalan',
@@ -87,10 +126,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 10),
-              
+
               ElevatedButton(
                 onPressed: () {
-                  // Aksi tombol pemesanan kostum trip
+                  // Action for ordering custom trip
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -98,7 +137,8 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,24 +153,30 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-              // Bagian Informasi Pesanan
+              // Order Information Section
               Container(
                 decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 padding: const EdgeInsets.all(20),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Edward Pieters',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      widget.userName, // Display the logged-in user's name
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                    const Icon(Icons.shopping_cart_outlined,
+                        color: Colors.white),
                   ],
                 ),
               ),
+
               const SizedBox(height: 10),
 
               Row(
@@ -142,28 +188,35 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-              // Bagian Open Trip Baru
+              // New Open Trip Section
               const Text(
                 'Open Trip Baru !',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              
+
               SizedBox(
                 height: 200,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildTripCard("Sunrise Ranca Upas", "IDR 325.000", "assets/images/sunrise_ranca_upas.jpg"),
-                    _buildTripCard("Tangkuban Perahu", "IDR 275.000", "assets/images/tangkuban_perahu.jpg"),
-                    _buildTripCard("Stone Garden", "IDR 225.000", "assets/images/stone_garden.jpg"),
-                    _buildTripCard("Gunung Putri", "IDR 475.000", "assets/images/gunung_putri.jpg"),
-                  ],
-                ),
+                child: _tripPackages.isNotEmpty
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _tripPackages.length,
+                        itemBuilder: (context, index) {
+                          final package = _tripPackages[index];
+                          return _buildTripCard(
+                            package['nama_paket'],
+                            'IDR ${package['harga']}',
+                            'http://10.0.2.2/backend/uploads/${package['foto']}', // Update image URL
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('Loading packages...'),
+                      ),
               ),
               const SizedBox(height: 20),
 
-              // Bagian Rekomendasi
+              // Recommendations Section
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -178,18 +231,25 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               const SizedBox(height: 10),
-              
+
               SizedBox(
                 height: 200,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildTripCard("Trekking Kawah Ratu", "IDR 350.000", "assets/images/kawah_ratu.jpg"),
-                    _buildTripCard("Pangalengan", "IDR 350.000", "assets/images/pangalengan.jpg"),
-                    _buildTripCard("Kota Lama Bandung", "IDR 350.000", "assets/images/kota_lama_bandung.jpg"),
-                    _buildTripCard("Trekking Ciwangun", "IDR 350.000", "assets/images/ciwangun.jpg"),
-                  ],
-                ),
+                child: _tripPackages.isNotEmpty
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _tripPackages.length,
+                        itemBuilder: (context, index) {
+                          final package = _tripPackages[index];
+                          return _buildTripCard(
+                            package['nama_paket'],
+                            'IDR ${package['harga']}',
+                            'http://10.0.2.2/backend/uploads/${package['foto']}', // Update image URL
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text('Loading recommendations...'),
+                      ),
               ),
             ],
           ),
@@ -197,7 +257,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _navigateToPage, // Menandai halaman Explore aktif
+        onTap: _navigateToPage,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.explore),
@@ -216,7 +276,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget untuk informasi pesanan dan transaksi
+  // Widget for order and transaction information
   Widget _buildInfoBox(String title, String value) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -228,13 +288,17 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text(title, style: const TextStyle(color: Colors.white)),
           const SizedBox(height: 5),
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(value,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 
-  // Widget untuk kartu perjalanan (trip card) tanpa subtitle
+  // Widget for trip card
   Widget _buildTripCard(String title, String price, String imagePath) {
     return Container(
       width: 160,
@@ -262,19 +326,22 @@ class _HomePageState extends State<HomePage> {
                 topRight: Radius.circular(15),
               ),
               image: DecorationImage(
-                image: AssetImage(imagePath),
+                image: NetworkImage(imagePath),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 5),
-                Text(price, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                Text(price,
+                    style: const TextStyle(fontSize: 14, color: Colors.blue)),
               ],
             ),
           ),

@@ -1,6 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BiodataPage extends StatefulWidget {
   const BiodataPage({super.key});
@@ -10,11 +12,82 @@ class BiodataPage extends StatefulWidget {
 }
 
 class _BiodataPageState extends State<BiodataPage> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
+  String? name;
+  String? email;
+  String? phone;
+  String? gender;
+  bool isLoading = true; // To show loading state
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBiodata();
+  }
+
+  Future<void> fetchBiodata() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.0.2.2/backend/biodata.php')); // Update with your server URL
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          name = data['name'];
+          email = data['email'];
+          phone = data['phone'];
+          gender = data['gender'];
+          isLoading = false; // Stop loading when data is received
+
+          // Set initial values for the controllers
+          nameController.text = name ?? '';
+          emailController.text = email ?? '';
+          phoneController.text = phone ?? '';
+          genderController.text = gender ?? '';
+        });
+      } else {
+        // Print error response
+        print('Failed to load biodata: ${response.statusCode} ${response.body}');
+        setState(() {
+          isLoading = false; // Stop loading on error
+        });
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        isLoading = false; // Stop loading on error
+      });
+    }
+  }
+
+  Future<void> updateBiodata() async {
+    try {
+      final response = await http.put(
+        Uri.parse('http://10.0.2.2/backend/update_biodata.php'), // Update to your update script URL
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': nameController.text,
+          'email': emailController.text,
+          'phone': phoneController.text,
+          'gender': genderController.text,
+          // Include user ID if necessary
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print(data['message']); // Display success message
+        // Optionally show a snackbar or a dialog to confirm success
+      } else {
+        print('Failed to update biodata: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,199 +112,63 @@ class _BiodataPageState extends State<BiodataPage> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: const [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage('assets/images/profile.jpg'), // Ganti dengan path gambar profil
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Edward Pieters',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator()) // Show loading indicator
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTextField(label: 'Nama', controller: nameController),
+                  _buildTextField(label: 'Email', controller: emailController),
+                  _buildTextField(label: 'No Telepon', controller: phoneController),
+                  _buildTextField(label: 'Jenis Kelamin', controller: genderController),
+                  const SizedBox(height: 30),
+                  _buildUpdateButton(),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
+      ),
+    );
+  }
 
-            // Input Nama Depan
-            const Text(
-              'Nama Depan',
-              style: TextStyle(color: Colors.blue),
+  Widget _buildTextField({required String label, required TextEditingController controller}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(color: Colors.blue)),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: 'Masukkan $label',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: firstNameController,
-              decoration: InputDecoration(
-                hintText: 'Masukkan Nama Depan',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
 
-            // Input Nama Belakang
-            const Text(
-              'Nama Belakang',
-              style: TextStyle(color: Colors.blue),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: lastNameController,
-              decoration: InputDecoration(
-                hintText: 'Masukkan Nama Belakang',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Input Jenis Kelamin
-            const Text(
-              'Jenis Kelamin',
-              style: TextStyle(color: Colors.blue),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: genderController,
-              decoration: InputDecoration(
-                hintText: 'Masukkan Jenis Kelamin',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Input Tanggal Lahir
-            const Text(
-              'Tanggal Lahir',
-              style: TextStyle(color: Colors.blue),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'DD',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'MM',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'YYYY',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Input No Telepon
-            const Text(
-              'No Telepon',
-              style: TextStyle(color: Colors.blue),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Text('+62'),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: phoneController,
-                    decoration: InputDecoration(
-                      hintText: 'Masukkan Nomor Telepon',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Input Lokasi
-            const Text(
-              'Masukkan Lokasi',
-              style: TextStyle(color: Colors.blue),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: locationController,
-              decoration: InputDecoration(
-                hintText: 'Masukkan Lokasi',
-                prefixIcon: const Icon(Icons.location_on, color: Colors.blue),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            // Tombol Tambah
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Aksi ketika tombol Tambah ditekan
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: const Text(
-                  'Tambah',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
+  Widget _buildUpdateButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          updateBiodata(); // Call the update function
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: const Text(
+          'Update',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

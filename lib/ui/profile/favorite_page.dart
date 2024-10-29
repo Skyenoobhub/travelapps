@@ -6,9 +6,15 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favorites = [
-      {"name": "Kota Lama Bandung", "image": "assets/images/kota_lama_bandung.jpg"},
-      {"name": "Srone Garden", "image": "assets/images/stone_garden.jpg"},
-      {"name": "Tangkuban Perahu", "image": "assets/images/tangkuban_perahu.jpg"},
+      {
+        "name": "Kota Lama Bandung",
+        "image": "assets/images/kota_lama_bandung.jpg"
+      },
+      {"name": "Stone Garden", "image": "assets/images/stone_garden.jpg"},
+      {
+        "name": "Tangkuban Perahu",
+        "image": "assets/images/tangkuban_perahu.jpg"
+      },
     ];
 
     return Scaffold(
@@ -70,12 +76,15 @@ class FavoritePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.blue,
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.blue,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const Icon(

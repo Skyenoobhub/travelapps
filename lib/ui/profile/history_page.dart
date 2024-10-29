@@ -6,8 +6,16 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final history = [
-      {"name": "Fun Trekking Ciwangun", "price": "Rp. 350.000,-", "image": "assets/images/ciwangun.jpg"},
-      {"name": "Kota Lama Bandung", "price": "Rp. 350.000,-", "image": "assets/images/kota_lama_bandung.jpg"},
+      {
+        "name": "Fun Trekking Ciwangun",
+        "price": "Rp. 350.000,-",
+        "image": "assets/images/ciwangun.jpg"
+      },
+      {
+        "name": "Kota Lama Bandung",
+        "price": "Rp. 350.000,-",
+        "image": "assets/images/kota_lama_bandung.jpg"
+      },
     ];
 
     return Scaffold(
@@ -27,7 +35,8 @@ class HistoryPage extends StatelessWidget {
           itemCount: history.length,
           itemBuilder: (context, index) {
             final item = history[index];
-            return _buildHistoryCard(item["name"]!, item["price"]!, item["image"]!);
+            return _buildHistoryCard(
+                item["name"]!, item["price"]!, item["image"]!);
           },
         ),
       ),
@@ -71,12 +80,19 @@ class HistoryPage extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Total Pesanan : $price',
-                    style: const TextStyle(color: Colors.blue, fontSize: 14),
+                    'Total Pesanan: $price',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
