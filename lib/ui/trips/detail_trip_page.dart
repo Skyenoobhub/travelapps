@@ -1,7 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: unused_import, prefer_const_constructors_in_immutables, avoid_print, prefer_const_constructors, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:travelapp/ui/payment/checkout.dart';  // Import the CheckoutPage
+import 'package:travelapp/ui/profile/favorite_page.dart';
 import 'dart:convert';
+import 'favorite_page.dart';  // Import the FavoritePage
 
 class DetailTripPage extends StatelessWidget {
   DetailTripPage({super.key, required this.packageId});
@@ -20,6 +24,24 @@ class DetailTripPage extends StatelessWidget {
       return data; // Get the data from the response
     } else {
       throw Exception('Failed to load package details');
+    }
+  }
+
+  // Method to handle adding to favorites
+  Future<void> addFavorite(String packageId) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2/backend/add_favorite.php'), // PHP script to handle favorite logic
+      body: {
+        'package_id': packageId, // Send packageId as String (Flutter's default type)
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Optionally, show a success message or do something else after adding to favorites
+      print("Package added to favorites");
+    } else {
+      // Handle error, maybe show a message to the user
+      print("Failed to add to favorites");
     }
   }
 
@@ -93,8 +115,15 @@ class DetailTripPage extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.favorite_border,
                                       color: Colors.white),
-                                  onPressed: () {
-                                    // Implement favorite functionality
+                                  onPressed: () async {
+                                    // Call the method to add this package to favorites
+                                    await addFavorite(package['id'].toString()); // Make sure package ID is passed as String
+                                    // After adding to favorites, navigate to the FavoritePage
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const FavoritePage()),
+                                    );
                                   },
                                 ),
                               ],
@@ -107,23 +136,6 @@ class DetailTripPage extends StatelessWidget {
                         packageName, // Display the package name
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Implement booking functionality
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.grey),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text(
-                          'Mau Coba Costum Trip? Pesan di sini',
-                          style: TextStyle(color: Colors.black),
-                        ),
                       ),
                       const Divider(height: 30),
                       DefaultTabController(
@@ -158,7 +170,7 @@ class DetailTripPage extends StatelessWidget {
                   ),
                 ),
               ),
-              _buildBottomBar(context, packagePrice),
+              _buildBottomBar(context, packagePrice, package),
             ],
           );
         },
@@ -166,7 +178,7 @@ class DetailTripPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, String harga) {
+  Widget _buildBottomBar(BuildContext context, String harga, Map<String, dynamic> package) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -193,7 +205,19 @@ class DetailTripPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              // Implement booking button functionality
+              // Navigate to CheckoutPage and pass the package details
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CheckoutPage(
+                    packageName: package['nama_paket'] ?? 'No Name Available',
+                    packagePrice: package['harga'] ?? '0',
+                    packageDescription: package['deskripsi'] ?? 'No Description Available',
+                    packageItinerary: package['rincian'] ?? 'No Itinerary Available',
+                    packageFacilities: package['fasilitas'] ?? 'No Facilities Available',
+                  ),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,

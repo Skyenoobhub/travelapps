@@ -1,11 +1,13 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, avoid_print
+// ignore_for_file: library_private_types_in_public_api, avoid_print, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class BiodataPage extends StatefulWidget {
-  const BiodataPage({super.key});
+  final String userId; // Mendapatkan userId yang diteruskan dari halaman sebelumnya
+
+  const BiodataPage({super.key, required this.userId}); // Menerima userId melalui konstruktor
 
   @override
   _BiodataPageState createState() => _BiodataPageState();
@@ -16,76 +18,40 @@ class _BiodataPageState extends State<BiodataPage> {
   String? email;
   String? phone;
   String? gender;
-  bool isLoading = true; // To show loading state
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
+  bool isLoading = true; // Untuk menunjukkan status loading
 
   @override
   void initState() {
     super.initState();
-    fetchBiodata();
+    fetchBiodata(widget.userId); // Panggil fetchBiodata dengan userId yang diteruskan
   }
 
-  Future<void> fetchBiodata() async {
+  // Fungsi untuk mengambil biodata berdasarkan userId
+  Future<void> fetchBiodata(String userId) async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2/backend/biodata.php')); // Update with your server URL
+      final response = await http.get(Uri.parse('http://10.0.2.2/backend/biodata.php?userId=$userId'));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        setState(() {
-          name = data['name'];
-          email = data['email'];
-          phone = data['phone'];
-          gender = data['gender'];
-          isLoading = false; // Stop loading when data is received
 
-          // Set initial values for the controllers
-          nameController.text = name ?? '';
-          emailController.text = email ?? '';
-          phoneController.text = phone ?? '';
-          genderController.text = gender ?? '';
+        setState(() {
+          name = data['name']; // Mengambil data nama
+          email = data['email']; // Mengambil data email
+          phone = data['phone']; // Mengambil data telepon
+          gender = data['gender']; // Mengambil data jenis kelamin
+          isLoading = false; // Mengubah status loading ke false setelah data diterima
         });
       } else {
-        // Print error response
-        print('Failed to load biodata: ${response.statusCode} ${response.body}');
+        print('Gagal memuat biodata: ${response.statusCode} ${response.body}');
         setState(() {
-          isLoading = false; // Stop loading on error
+          isLoading = false; // Mengubah status loading ke false jika gagal
         });
       }
     } catch (e) {
-      print('Error: $e');
+      print('Terjadi error: $e');
       setState(() {
-        isLoading = false; // Stop loading on error
+        isLoading = false; // Mengubah status loading ke false jika ada error
       });
-    }
-  }
-
-  Future<void> updateBiodata() async {
-    try {
-      final response = await http.put(
-        Uri.parse('http://10.0.2.2/backend/update_biodata.php'), // Update to your update script URL
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'name': nameController.text,
-          'email': emailController.text,
-          'phone': phoneController.text,
-          'gender': genderController.text,
-          // Include user ID if necessary
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        print(data['message']); // Display success message
-        // Optionally show a snackbar or a dialog to confirm success
-      } else {
-        print('Failed to update biodata: ${response.statusCode} ${response.body}');
-      }
-    } catch (e) {
-      print('Error: $e');
     }
   }
 
@@ -113,63 +79,42 @@ class _BiodataPageState extends State<BiodataPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: isLoading
-            ? Center(child: CircularProgressIndicator()) // Show loading indicator
+            ? Center(child: CircularProgressIndicator()) // Menampilkan indikator loading
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTextField(label: 'Nama', controller: nameController),
-                  _buildTextField(label: 'Email', controller: emailController),
-                  _buildTextField(label: 'No Telepon', controller: phoneController),
-                  _buildTextField(label: 'Jenis Kelamin', controller: genderController),
-                  const SizedBox(height: 30),
-                  _buildUpdateButton(),
+                  Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildInfoRow('Nama', name),
+                          _buildInfoRow('Email', email),
+                          _buildInfoRow('No Telepon', phone),
+                          _buildInfoRow('Jenis Kelamin', gender),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
       ),
     );
   }
 
-  Widget _buildTextField({required String label, required TextEditingController controller}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: TextStyle(color: Colors.blue)),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: 'Masukkan $label',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  Widget _buildUpdateButton() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          updateBiodata(); // Call the update function
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        child: const Text(
-          'Update',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+  // Widget untuk menampilkan informasi dalam bentuk row
+  Widget _buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Text('$label:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(width: 8),
+          Text(value ?? 'Tidak tersedia', style: TextStyle(color: Colors.grey)),
+        ],
       ),
     );
   }

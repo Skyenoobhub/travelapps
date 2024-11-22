@@ -1,10 +1,14 @@
-// ignore_for_file: use_super_parameters, prefer_const_declarations, avoid_print
+// ignore_for_file: use_super_parameters, prefer_const_declarations, avoid_print, unused_element, prefer_final_fields, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:travelapp/ui/payment/checkout.dart';
+import 'dart:math'; // Import untuk shuffle()
 import 'package:travelapp/ui/profile/profile.dart';
 import 'package:travelapp/ui/trips/trips.dart';
+import 'package:intl/intl.dart';
+import 'package:travelapp/ui/trips/detail_trip_page.dart';  // Import DetailTripPage
 
 class HomePage extends StatefulWidget {
   final String userName;
@@ -18,6 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0; // Store the active page index
   List<Map<String, dynamic>> _tripPackages = []; // Store trip packages from API
+  List<Map<String, dynamic>> _cart = [];
 
   // Function to fetch trip packages from API
   Future<void> _fetchTripPackages() async {
@@ -29,6 +34,7 @@ class _HomePageState extends State<HomePage> {
         final data = json.decode(response.body);
         setState(() {
           _tripPackages = List<Map<String, dynamic>>.from(data['data']);
+          _tripPackages.shuffle(); // Mengacak urutan trip setelah diterima
         });
       } else {
         print('Failed to load trip packages');
@@ -42,6 +48,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchTripPackages(); // Fetch trip packages when the page loads
+  }
+
+  void _addToCart(Map<String, dynamic> package) {
+    setState(() {
+      _cart.add(package);
+    });
   }
 
   // Function to navigate to the page based on the index
@@ -73,6 +85,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan tanggal hari ini
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(now);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -81,26 +96,27 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Senin, 22 Oktober 2024',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            Text(
+              formattedDate, // Menampilkan tanggal yang sudah diformat
+              style: const TextStyle(color: Colors.black, fontSize: 18), // Increased font size
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon:
-                      const Icon(Icons.notifications_none, color: Colors.blue),
-                  onPressed: () {
-                    // Notification action
-                  },
-                ),
-                const SizedBox(width: 10),
-                CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  radius: 16,
-                  child: const Icon(Icons.person, color: Colors.black),
-                ),
-              ],
+            IconButton(
+              icon: const Icon(Icons.shopping_cart, color: Colors.black),
+              onPressed: () {
+                // Navigate to Checkout Page and pass selected cart items
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CheckoutPage(
+                      packageName: _cart.isNotEmpty ? _cart[0]['nama_paket'] : '',
+                      packagePrice: _cart.isNotEmpty ? _cart[0]['harga'] : '',
+                      packageDescription: '', // Assuming placeholder for now
+                      packageItinerary: '', // Assuming placeholder for now
+                      packageFacilities: '', // Assuming placeholder for now
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -115,88 +131,26 @@ class _HomePageState extends State<HomePage> {
               // Header Section
               Text(
                 'Halo, ${widget.userName}!', // Personalized greeting
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+                style: const TextStyle(fontSize: 20, color: Colors.black87), // Increased font size
               ),
               const Text(
                 'Ayo Jalan-Jalan',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 30, // Increased font size
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),
-              const SizedBox(height: 10),
-
-              ElevatedButton(
-                onPressed: () {
-                  // Action for ordering custom trip
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.grey),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Mau Coba Costum Trip? Pesan di sini",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    Icon(Icons.arrow_forward, color: Colors.black),
-                  ],
-                ),
-              ),
               const SizedBox(height: 20),
-
-              // Order Information Section
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.userName, // Display the logged-in user's name
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Icon(Icons.shopping_cart_outlined,
-                        color: Colors.white),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildInfoBox("Pesanan Aktif", "0"),
-                  _buildInfoBox("Total Transaksi", "0"),
-                ],
-              ),
-              const SizedBox(height: 20),
-
               // New Open Trip Section
               const Text(
                 'Open Trip Baru !',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // Increased font size
               ),
               const SizedBox(height: 10),
 
               SizedBox(
-                height: 200,
+                height: 240, // Increased card height
                 child: _tripPackages.isNotEmpty
                     ? ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -204,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           final package = _tripPackages[index];
                           return _buildTripCard(
+                            package['id'], // Pass the package ID
                             package['nama_paket'],
                             'IDR ${package['harga']}',
                             'http://10.0.2.2/backend/uploads/${package['foto']}', // Update image URL
@@ -222,18 +177,18 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     'Rekomendasi',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // Increased font size
                   ),
                   Text(
                     'Lihat Semua',
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.blue, fontSize: 16), // Increased font size
                   ),
                 ],
               ),
               const SizedBox(height: 10),
 
               SizedBox(
-                height: 200,
+                height: 240, // Increased card height
                 child: _tripPackages.isNotEmpty
                     ? ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -241,6 +196,7 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           final package = _tripPackages[index];
                           return _buildTripCard(
+                            package['id'], // Pass the package ID
                             package['nama_paket'],
                             'IDR ${package['harga']}',
                             'http://10.0.2.2/backend/uploads/${package['foto']}', // Update image URL
@@ -291,7 +247,7 @@ class _HomePageState extends State<HomePage> {
           Text(value,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 20, // Increased font size
                   fontWeight: FontWeight.bold)),
         ],
       ),
@@ -299,53 +255,64 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Widget for trip card
-  Widget _buildTripCard(String title, String price, String imagePath) {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
+  Widget _buildTripCard(String packageId, String title, String price, String imagePath) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to DetailTripPage with the package ID
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailTripPage(packageId: packageId), // Pass package ID
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-              ),
-              image: DecorationImage(
-                image: NetworkImage(imagePath),
-                fit: BoxFit.cover,
+        );
+      },
+      child: Container(
+        width: 200, // Increased card width
+        margin: const EdgeInsets.only(right: 15), // Increased margin
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 120, // Increased image height
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                image: DecorationImage(
+                  image: NetworkImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 5),
-                Text(price,
-                    style: const TextStyle(fontSize: 14, color: Colors.blue)),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(12), // Increased padding
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold)), // Increased font size
+                  const SizedBox(height: 5),
+                  Text(price,
+                      style: const TextStyle(fontSize: 16, color: Colors.blue)), // Increased font size
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

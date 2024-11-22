@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
               _buildListTile('Biodata', Icons.person, context),
               _buildListTile('Histori', Icons.history, context),
               _buildListTile('Favorit', Icons.favorite, context),
-              _buildNotificationTile(),
+
               const SizedBox(height: 20),
               _buildSectionTitle('Bantuan', Icons.help_outline),
               _buildListTile('Pertanyaan Umum', Icons.question_answer, context),
@@ -208,7 +208,7 @@ class ProfilePage extends StatelessWidget {
         if (title == 'Biodata') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const BiodataPage()),
+            MaterialPageRoute(builder: (context) => BiodataPage(userId: userName)),
           );
         } else if (title == 'Histori') {
           Navigator.push(
@@ -227,20 +227,6 @@ class ProfilePage extends StatelessWidget {
           );
         }
       },
-    );
-  }
-
-  // Widget for notification tile with Switch
-  Widget _buildNotificationTile() {
-    return ListTile(
-      leading: const Icon(Icons.notifications, color: Colors.black87),
-      title: const Text('Pemberitahuan'),
-      trailing: Switch(
-        value: true, // Set switch value
-        onChanged: (value) {
-          // Action when switch changes
-        },
-      ),
     );
   }
 }
