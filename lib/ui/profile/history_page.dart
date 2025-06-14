@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -19,42 +21,48 @@ class HistoryPage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F4FF),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF1565C0),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           'Histori',
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        child: ListView.separated(
           itemCount: history.length,
+          separatorBuilder: (_, __) => SizedBox(height: 16),
           itemBuilder: (context, index) {
             final item = history[index];
             return _buildHistoryCard(
-                item["name"]!, item["price"]!, item["image"]!);
+              name: item["name"]!,
+              price: item["price"]!,
+              imagePath: item["image"]!,
+            );
           },
         ),
       ),
     );
   }
 
-  Widget _buildHistoryCard(String name, String price, String imagePath) {
+  Widget _buildHistoryCard({
+    required String name,
+    required String price,
+    required String imagePath,
+  }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 6,
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -62,8 +70,8 @@ class HistoryPage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
+              topLeft: Radius.circular(16),
+              bottomLeft: Radius.circular(16),
             ),
             child: Image.asset(
               imagePath,
@@ -74,25 +82,48 @@ class HistoryPage extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_outlined, color: Colors.blue.shade700, size: 18),
+                      SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Total Pesanan: $price',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 14,
-                    ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.monetization_on_outlined, color: Colors.green.shade700, size: 18),
+                      SizedBox(width: 6),
+                      Text(
+                        'Total Pesanan: ',
+                        style: TextStyle(color: Colors.black87, fontSize: 14),
+                      ),
+                      Expanded(
+                        child: Text(
+                          price,
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

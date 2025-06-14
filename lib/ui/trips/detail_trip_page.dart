@@ -121,7 +121,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                       const Divider(color: Colors.blueAccent, thickness: 2),
                       const SizedBox(height: 16),
 
-                      /// Horizontal Buttons
+                      /// Tombol Navigasi Horizontal
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(3, (index) {
@@ -155,19 +155,37 @@ class _DetailTripPageState extends State<DetailTripPage> {
 
                       const SizedBox(height: 20),
 
-                      /// Content Display
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 3))],
+                      /// Konten Dengan Transisi Halus
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: SizeTransition(
+                            sizeFactor: animation,
+                            axis: Axis.vertical,
+                            child: child,
+                          ),
                         ),
-                        child: Text(
-                          sections[_selectedIndex],
-                          style: const TextStyle(fontSize: 15, height: 1.6),
-                          textAlign: TextAlign.justify,
+                        child: Container(
+                          key: ValueKey<int>(_selectedIndex),
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            sections[_selectedIndex],
+                            style: const TextStyle(fontSize: 15, height: 1.6),
+                            textAlign: TextAlign.justify,
+                          ),
                         ),
                       ),
 
@@ -177,7 +195,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                 ),
               ),
 
-              /// Bottom Booking Bar
+              /// Bottom Bar Pesan
               Positioned(
                 bottom: 0,
                 left: 0,

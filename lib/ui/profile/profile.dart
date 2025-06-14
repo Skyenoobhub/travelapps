@@ -34,13 +34,14 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F7FA),
+      backgroundColor: Color(0xFFF2F7FF),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D47A1),
-        title: const Text('Profil'),
+        backgroundColor: Color(0xFF1565C0),
+        elevation: 2,
+        title: Text('Profil', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: Icon(Icons.logout, color: Colors.white),
             onPressed: () => _showLogoutDialog(context),
           ),
         ],
@@ -48,46 +49,63 @@ class ProfilePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 32,
-                    backgroundColor: Colors.blue.shade100,
-                    child: Icon(Icons.person, size: 36, color: Colors.blue),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      userName,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 12),
+            _buildProfileHeader(),
+            _divider(),
             _buildSectionTitle('Umum', Icons.settings),
-            _buildSettingItem(context, 'Biodata', Icons.person, BiodataPage(userId: userName)),
+            _buildSettingItem(context, 'Biodata', Icons.account_box_rounded, BiodataPage(userId: userName)),
             _divider(),
-            _buildSettingItem(context, 'Histori', Icons.history, const HistoryPage()),
+            _buildSettingItem(context, 'Histori', Icons.history_edu_rounded, HistoryPage()),
             _divider(),
-            _buildSettingItem(context, 'Favorit', Icons.favorite, const FavoritePage()),
+            _buildSettingItem(context, 'Favorit', Icons.favorite_outline, FavoritePage()),
             SizedBox(height: 24),
             _buildSectionTitle('Bantuan', Icons.help_outline),
-            _buildSettingItem(context, 'Pertanyaan Umum', Icons.question_answer, const FAQPage()),
+            _buildSettingItem(context, 'Pertanyaan Umum', Icons.live_help_rounded, FAQPage()),
+            SizedBox(height: 30),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 2,
+        selectedItemColor: Color(0xFF1565C0),
+        unselectedItemColor: Colors.grey,
         onTap: (index) => _navigateToPage(index, context),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Trips'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 38,
+            backgroundColor: Colors.blue.shade100,
+            child: Icon(Icons.person, size: 40, color: Colors.blue.shade800),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userName,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue.shade900),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Selamat datang kembali!",
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -102,14 +120,14 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildSectionTitle(String title, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue),
+          Icon(icon, color: Colors.blue.shade800),
           SizedBox(width: 8),
           Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.blue.shade800),
           ),
         ],
       ),
@@ -119,9 +137,12 @@ class ProfilePage extends StatelessWidget {
   Widget _buildSettingItem(BuildContext context, String title, IconData icon, Widget page) {
     return ListTile(
       tileColor: Colors.white,
-      leading: Icon(icon, color: Colors.black87),
-      title: Text(title),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey),
+      leading: Icon(icon, color: Colors.blue.shade700),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 16),
+      ),
+      trailing: Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: 18),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) => page));
       },
@@ -173,7 +194,7 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blue.shade700,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                     child: Padding(

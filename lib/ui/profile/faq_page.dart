@@ -32,65 +32,86 @@ class FAQPage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F4FF),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF1565C0),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Pertanyaan Umum',
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-      backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        child: ListView.separated(
           itemCount: faqs.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final faq = faqs[index];
-            return _buildExpansionTile(faq["question"]!, faq["answer"]!);
+            return _buildFAQItem(faq["question"]!, faq["answer"]!);
           },
         ),
       ),
     );
   }
 
-  Widget _buildExpansionTile(String question, String answer) {
+  Widget _buildFAQItem(String question, String answer) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 6,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: ExpansionTile(
-        title: Text(
-          question,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        iconColor: Colors.blue,
+        collapsedIconColor: Colors.blue,
+        title: Row(
+          children: [
+            const Icon(Icons.help_outline, color: Colors.blue),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                question,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ],
         ),
         children: [
+          const Divider(color: Color(0xFFE0E0E0), height: 1, thickness: 1),
           Padding(
-            padding: const EdgeInsets.all(15),
-            child: Text(
-              answer,
-              style: const TextStyle(color: Colors.black54),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.question_answer_outlined, color: Colors.grey),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    answer,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 14,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-        trailing: const Icon(
-          Icons.arrow_drop_down,
-          color: Colors.blue,
-        ),
       ),
     );
   }
