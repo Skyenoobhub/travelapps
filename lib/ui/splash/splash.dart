@@ -23,44 +23,58 @@ class _SplashState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D47A1), // Warna latar belakang biru
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 2, // Menambahkan ruang ekstra di bagian atas
-            child: Container(),
+      body: Container(
+        width: double.infinity, // Full width
+        height: double.infinity, // Full height
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1976D2), Color(0xFF0D47A1)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          // Logo di tengah
-          Image.asset(
-            'assets/images/logo.png', // Ganti dengan path gambar Anda
-            width: 150, // Ukuran gambar
-          ),
-          const SizedBox(height: 20),
-          // Teks "TripShare"
-          const Text(
-            'TripShare',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          Expanded(
-            flex: 3, // Menambahkan ruang ekstra di bagian bawah
-            child: Container(),
-          ),
-          // Teks di bagian bawah
-          const Padding(
-            padding: EdgeInsets.only(bottom: 30.0),
-            child: Text(
-              'Yuk Jalan Dulu Aja',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+            children: <Widget>[
+              const Spacer(flex: 2),
+
+              // Gambar logo di tengah
+              Image.asset(
+                'assets/images/logo.png',
+                width: 150,
+                fit: BoxFit.contain,
               ),
-            ),
+              const SizedBox(height: 20),
+
+              // Teks "TripShare"
+              const Text(
+                'TripShare',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                ),
+              ),
+
+              const Spacer(flex: 3),
+
+              // Teks bawah
+              const Padding(
+                padding: EdgeInsets.only(bottom: 30.0),
+                child: Text(
+                  'Yuk Jalan Dulu Aja',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters, prefer_const_constructors, prefer_const_declarations, avoid_print, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_super_parameters, prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, prefer_const_declarations
 
 import 'dart:async';
 import 'dart:convert';
@@ -96,41 +96,35 @@ class _ExploreContentState extends State<ExploreContent> {
   int _currentPage = 0;
   Timer? _timer;
 
-  // Untuk berita - tetap sama isinya
   final List<Map<String, String>> _newsList = [
     {
       "title": "Keindahan Alam Bandung",
       "desc": "Menjelajahi pesona alam yang memukau di Bandung.",
-      "image":
-          "https://upload.wikimedia.org/wikipedia/commons/9/98/Lake_Tangkuban_Perahu_Bandung_2018.jpg",
+      "image": "",
       "url": "https://id.wikipedia.org/wiki/Bandung",
     },
     {
       "title": "Kuliner Khas Bandung",
       "desc": "Nikmati makanan tradisional dan modern di kota Bandung.",
-      "image":
-          "https://upload.wikimedia.org/wikipedia/commons/8/8f/Bandung-Kuliner.jpg",
+      "image": "",
       "url": "https://id.wikipedia.org/wiki/Kuliner_Bandung",
     },
     {
       "title": "Wisata Sejarah Bandung",
       "desc": "Kunjungi tempat bersejarah dan museum menarik di Bandung.",
-      "image":
-          "https://upload.wikimedia.org/wikipedia/commons/e/e6/Museum_Gedung_Sate_Bandung_Indonesia.jpg",
+      "image": "",
       "url": "https://id.wikipedia.org/wiki/Gedung_Sate",
     },
     {
       "title": "Pusat Belanja di Bandung",
       "desc": "Temukan fashion dan produk lokal terbaik di Bandung.",
-      "image":
-          "https://upload.wikimedia.org/wikipedia/commons/4/44/Bandung_Pasar_Baru_panjang_jalan.jpg",
+      "image": "",
       "url": "https://id.wikipedia.org/wiki/Pasar_Baru_Bandung",
     },
     {
       "title": "Event dan Festival Bandung",
       "desc": "Ikuti berbagai acara dan festival budaya di Bandung.",
-      "image":
-          "https://upload.wikimedia.org/wikipedia/commons/5/5e/Bandung_festival_2013.jpg",
+      "image": "",
       "url": "https://id.wikipedia.org/wiki/Bandung_Festival",
     },
   ];
@@ -168,7 +162,7 @@ class _ExploreContentState extends State<ExploreContent> {
       if (_newsScrollController.hasClients) {
         _newsCurrentIndex++;
         if (_newsCurrentIndex >= _newsList.length) _newsCurrentIndex = 0;
-        final offset = _newsCurrentIndex * 292.0; // width + margin kira2 280 + 12
+        final offset = _newsCurrentIndex * 292.0;
         _newsScrollController.animateTo(offset,
             duration: Duration(milliseconds: 600), curve: Curves.easeInOut);
       }
@@ -219,7 +213,7 @@ class _ExploreContentState extends State<ExploreContent> {
           ),
           Row(
             children: [
-              Icon(Icons.directions_bus, color: Colors.blue), // tetap directions_bus
+              Icon(Icons.directions_bus, color: Colors.blue),
               SizedBox(width: 8),
               Text('Ayo Jalan-Jalan',
                   style: TextStyle(
@@ -256,11 +250,11 @@ class _ExploreContentState extends State<ExploreContent> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Navigasi ke halaman Trips
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OpenTripPage(userName: widget.userName),
+                      builder: (context) =>
+                          OpenTripPage(userName: widget.userName),
                     ),
                   );
                 },
@@ -282,14 +276,14 @@ class _ExploreContentState extends State<ExploreContent> {
           Divider(),
           Row(
             children: [
-              Icon(Icons.update, color: Colors.green), // icon update untuk Terkini
+              Icon(Icons.update, color: Colors.green),
               SizedBox(width: 8),
               Text('Terkini di Bandung',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ],
           ),
           SizedBox(height: 10),
-          _buildNewsListIconStyle(), // ganti ke list icon style
+          _buildNewsListIconStyle(),
           SizedBox(height: 20),
         ],
       ),
@@ -368,26 +362,18 @@ class _ExploreContentState extends State<ExploreContent> {
         margin: EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(color: Colors.grey, blurRadius: 4, offset: Offset(0, 2)),
-          ],
+          borderRadius: BorderRadius.circular(16), // sudut lebih membulat tapi tetap kotak
+          border: Border.all(color: Colors.grey.shade300, width: 1), // border tipis estetik
+          // tanpa shadow agar clean dan minimalis
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.network(imageUrl,
                   height: 120, width: double.infinity, fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  height: 120,
-                  color: Colors.grey[200],
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }, errorBuilder: (context, error, stackTrace) {
+                  errorBuilder: (context, error, stackTrace) {
                 return Container(
                   height: 120,
                   color: Colors.grey[300],
@@ -403,7 +389,7 @@ class _ExploreContentState extends State<ExploreContent> {
                   Text(title,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Divider(),
+                  Divider(height: 18, thickness: 1, color: Colors.grey[300]),
                   Row(
                     children: [
                       Icon(Icons.wallet, size: 16, color: Colors.blue),
@@ -424,11 +410,26 @@ class _ExploreContentState extends State<ExploreContent> {
     );
   }
 
-  // Berita dengan icon list style (tanpa gambar besar)
   Widget _buildNewsListIconStyle() {
+    final List<IconData> icons = [
+      Icons.park,
+      Icons.restaurant,
+      Icons.museum,
+      Icons.shopping_bag,
+      Icons.celebration,
+    ];
+
+    final List<String> descriptions = [
+      "Nikmati keindahan alam Bandung seperti Tangkuban Perahu dan Kawah Putih.",
+      "Rasakan pengalaman kuliner dari batagor, seblak, hingga makanan kekinian.",
+      "Jelajahi gedung-gedung bersejarah dan peninggalan kolonial di kota ini.",
+      "Bandung adalah surga belanja: distro, factory outlet, hingga pasar tradisional.",
+      "Acara budaya, konser musik, dan festival tahunan meriah di berbagai titik kota.",
+    ];
+
     return ListView.separated(
-      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: _newsList.length,
       separatorBuilder: (_, __) => Divider(),
       itemBuilder: (context, index) {
@@ -440,26 +441,19 @@ class _ExploreContentState extends State<ExploreContent> {
               MaterialPageRoute(
                 builder: (context) => NewsDetailPage(
                   title: news['title']!,
-                  description: news['desc']!,
+                  description: descriptions[index],
                   url: news['url']!,
-                  imageUrl: news['image']!,
+                  imageUrl: '',
                 ),
               ),
             );
           },
-          leading: Icon(Icons.article_outlined, color: Colors.green, size: 36),
-          title: Text(
-            news['title']!,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          subtitle: Text(
-            news['desc']!,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.grey[700]),
-          ),
+          leading: Icon(icons[index], color: Colors.teal, size: 32),
+          title: Text(news['title']!,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          subtitle: Text(descriptions[index],
+              maxLines: 2, overflow: TextOverflow.ellipsis),
           trailing: Icon(Icons.arrow_forward_ios, size: 16),
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         );
       },
     );
@@ -484,48 +478,37 @@ class NewsDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Berita Detail'),
+        title: Text("Detail Berita"),
+        backgroundColor: Colors.blue,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: Icon(Icons.broken_image, size: 40),
-                  ),
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.article_rounded, size: 60, color: Colors.green),
+            SizedBox(height: 20),
+            Text(
+              title,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 12),
+            Text(
+              description,
+              style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Implementasikan url_launcher di sini jika dibutuhkan
+              },
+              icon: Icon(Icons.open_in_browser),
+              label: Text("Buka Sumber"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
               ),
-              SizedBox(height: 12),
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue[800]),
-              ),
-              SizedBox(height: 8),
-              Text(
-                description,
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 12),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  // buka URL dengan url_launcher jika mau (tidak termasuk dalam request)
-                },
-                icon: Icon(Icons.open_in_new),
-                label: Text('Buka Sumber'),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

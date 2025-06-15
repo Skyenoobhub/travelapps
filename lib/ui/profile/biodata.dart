@@ -12,8 +12,8 @@ class BiodataPage extends StatefulWidget {
 }
 
 class _BiodataPageState extends State<BiodataPage> {
-  final String name = 'Putra';
-  final String email = 'putra@gmail.com';
+  final String name = 'edward';
+  final String email = 'edward@gmail.com';
   final String phone = '0829754274197';
   final String gender = 'Laki-laki';
   bool isLoading = false;

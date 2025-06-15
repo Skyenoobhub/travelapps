@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:travelapp/ui/payment/checkout.dart';
-import 'package:travelapp/ui/profile/favorite_page.dart';
 import 'dart:convert';
 
 class DetailTripPage extends StatefulWidget {
@@ -19,7 +18,9 @@ class _DetailTripPageState extends State<DetailTripPage> {
   int _selectedIndex = 0;
 
   Future<Map<String, dynamic>> fetchPackageDetails() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2/backend/detail_paket.php?id=${widget.packageId}'));
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2/backend/detail_paket.php?id=${widget.packageId}'),
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['data'];
       if (data == null) throw Exception('Data kosong');
@@ -29,24 +30,19 @@ class _DetailTripPageState extends State<DetailTripPage> {
     }
   }
 
-  Future<void> addFavorite(String packageId) async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2/backend/add_favorite.php'),
-      body: {'package_id': packageId},
-    );
-    if (response.statusCode == 200) {
-      print("Favorit berhasil ditambahkan");
-    } else {
-      print("Gagal menambahkan favorit");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F6FF),
       appBar: AppBar(
-        title: const Text("Detail Trip", style: TextStyle(color: Colors.blueAccent)),
+        title: const Text(
+          "Detail Trip",
+          style: TextStyle(
+            color: Colors.blueAccent,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         iconTheme: const IconThemeData(color: Colors.blueAccent),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -106,15 +102,14 @@ class _DetailTripPageState extends State<DetailTripPage> {
                               ),
                             ),
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              await addFavorite(widget.packageId);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("Ditambahkan ke favorit")),
-                              );
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritePage()));
-                            },
-                            icon: const Icon(Icons.favorite_border, color: Colors.red),
+                          // Ganti ikon menjadi ikon informasi
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(Icons.info_outline, color: Colors.blueAccent),
                           ),
                         ],
                       ),

@@ -5,9 +5,8 @@ import 'package:travelapp/home.dart';
 import 'package:travelapp/ui/login/login.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 import 'biodata.dart';
-import 'favorite_page.dart';
-import 'history_page.dart';
 import 'faq_page.dart';
+import 'about_page.dart'; // ← Tambahan
 
 class ProfilePage extends StatelessWidget {
   final String userName;
@@ -38,7 +37,14 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xFF1565C0),
         elevation: 2,
-        title: Text('Profil', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Profil',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.white),
@@ -54,12 +60,10 @@ class ProfilePage extends StatelessWidget {
             _buildSectionTitle('Umum', Icons.settings),
             _buildSettingItem(context, 'Biodata', Icons.account_box_rounded, BiodataPage(userId: userName)),
             _divider(),
-            _buildSettingItem(context, 'Histori', Icons.history_edu_rounded, HistoryPage()),
-            _divider(),
-            _buildSettingItem(context, 'Favorit', Icons.favorite_outline, FavoritePage()),
-            SizedBox(height: 24),
             _buildSectionTitle('Bantuan', Icons.help_outline),
             _buildSettingItem(context, 'Pertanyaan Umum', Icons.live_help_rounded, FAQPage()),
+            _divider(),
+            _buildSettingItem(context, 'Tentang', Icons.info_outline, AboutPage()), // ← Tambahan
             SizedBox(height: 30),
           ],
         ),

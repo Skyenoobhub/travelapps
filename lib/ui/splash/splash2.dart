@@ -13,95 +13,104 @@ class _SplashScreen2State extends State<SplashScreen2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D47A1), // Latar belakang biru
-      body: Center(
-        // Memastikan seluruh elemen berada di tengah layar
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Elemen vertikal berada di tengah
-          children: <Widget>[
-            // Gambar logo di tengah
-            Image.asset(
-              'assets/images/logo.png', // Ganti dengan path gambar Anda
-              width: 150, // Ukuran gambar
-            ),
-            const SizedBox(height: 20),
-            // Teks "TripShare"
-            const Text(
-              'TripShare',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1976D2), Color(0xFF0D47A1)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Gambar logo
+              Image.asset(
+                'assets/images/logo.png',
+                width: 150,
               ),
-            ),
-            const SizedBox(height: 40), // Jarak antara teks dan tombol
+              const SizedBox(height: 20),
 
-            // Tombol "Masuk"
-            ElevatedButton(
-              onPressed: () {
-                // Aksi ketika tombol "Masuk" ditekan
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-              ),
-              child: const Text(
-                'Masuk',
+              // Judul aplikasi
+              const Text(
+                'TripShare',
                 style: TextStyle(
-                  color: Colors.blueAccent,
-                  fontSize: 16,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
                 ),
               ),
-            ),
+              const SizedBox(height: 40),
 
-            const SizedBox(height: 20), // Jarak antara tombol Masuk dan Daftar
-
-            // Tombol "Daftar"
-            ElevatedButton(
-              onPressed: () {
-                // Aksi ketika tombol "Daftar" ditekan
-                Navigator.push(
+              // Tombol Masuk
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterPage()));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                icon: const Icon(Icons.login, color: Colors.blueAccent),
+                label: const Text(
+                  'Masuk',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                ),
               ),
-              child: const Text(
-                'Daftar',
+
+              const SizedBox(height: 20),
+
+              // Tombol Daftar
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegisterPage()),
+                  );
+                },
+                icon: const Icon(Icons.app_registration, color: Colors.blueAccent),
+                label: const Text(
+                  'Daftar',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // Teks di bagian bawah
+              const Text(
+                'Yuk Jalan Dulu Aja',
                 style: TextStyle(
-                  color: Colors.blueAccent,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
-            ),
-
-            const SizedBox(height: 40), // Ruang antara tombol dan teks bawah
-
-            // Teks di bagian bawah "Yuk Jalan Dulu Aja"
-            const Text(
-              'Yuk Jalan Dulu Aja',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
