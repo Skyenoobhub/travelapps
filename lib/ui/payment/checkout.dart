@@ -1,88 +1,143 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:travelapp/ui/payment/history_page.dart'; // pastikan path ini sesuai
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
   final String packageName;
   final String packagePrice;
   final String packageDescription;
   final String packageItinerary;
   final String packageFacilities;
+  final String userName; // ← Tambahan
 
-  // Constructor to receive data from DetailTripPage
-  CheckoutPage({
+  const CheckoutPage({
+    super.key,
     required this.packageName,
     required this.packagePrice,
     required this.packageDescription,
     required this.packageItinerary,
     required this.packageFacilities,
+    required this.userName, // ← Tambahan
   });
+
+  @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  late final WebViewController _controller;
+  String? snapToken;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (url) async {
+            print('🌐 Navigasi WebView: $url');
+
+            if (url.contains("finish") || url.contains("transaction_status=succeed")) {
+              print("✅ Transaksi sukses terdeteksi");
+              await simpanDetailTransaksi();
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HistoryPage(userName: widget.userName),
+                ),
+              );
+            } else if (url.contains("error") || url.contains("transaction_status=deny")) {
+              print("❌ Transaksi gagal terdeteksi");
+              Navigator.pop(context);
+            }
+          },
+        ),
+      );
+    getSnapToken();
+  }
+
+  Future<void> getSnapToken() async {
+    final url = Uri.parse('http://10.0.2.2/backend/midtrans_token.php');
+
+    final response = await http.post(url, body: {
+      'nama_paket': widget.packageName,
+      'harga': widget.packagePrice,
+      'deskripsi': widget.packageDescription,
+      'rincian': widget.packageItinerary,
+      'fasilitas': widget.packageFacilities,
+      'nama_user': widget.userName, // ← Gunakan user dari parameter
+    });
+
+    final result = json.decode(response.body);
+    print('📥 RESPONSE TOKEN: $result');
+
+    if (response.statusCode == 200 && result['token'] != null) {
+      setState(() {
+        snapToken = result['token'];
+        isLoading = false;
+      });
+
+      final snapUrl =
+          'https://app.sandbox.midtrans.com/snap/v2/vtweb/${result['token']}';
+      _controller.loadRequest(Uri.parse(snapUrl));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mendapatkan token: ${result['error']}')),
+      );
+    }
+  }
+
+  Future<void> simpanDetailTransaksi() async {
+    final url = Uri.parse('http://10.0.2.2/backend/simpan_transaksi.php');
+
+    final body = {
+      'nama_paket': widget.packageName,
+      'harga': widget.packagePrice,
+      'deskripsi': widget.packageDescription,
+      'rincian': widget.packageItinerary,
+      'fasilitas': widget.packageFacilities,
+      'nama_user': widget.userName, // ← Gunakan user dari parameter
+    };
+
+    print("📤 Mengirim data ke database: $body");
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+
+      print("📦 Response: ${response.statusCode} - ${response.body}");
+
+      final result = json.decode(response.body);
+      if (result['success'] == true) {
+        print('✅ Detail transaksi berhasil disimpan');
+      } else {
+        print('❌ Gagal simpan: ${result['error']}');
+      }
+    } catch (e) {
+      print('❌ Exception simpan transaksi: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: const Text('Checkout', style: TextStyle(color: Colors.blue)),
+        title: Text("Pembayaran"),
+        backgroundColor: Colors.blueAccent,
       ),
-      backgroundColor: const Color(0xFFF5F5F5),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              packageName,
-              style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const Divider(height: 20),
-            Text(
-              'Price: IDR $packagePrice / Pax',
-              style: const TextStyle(
-                  fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-            const Divider(height: 20),
-            Text(
-              'Description:',
-              style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(packageDescription),
-            const Divider(height: 20),
-            Text(
-              'Itinerary:',
-              style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(packageItinerary),
-            const Divider(height: 20),
-            Text(
-              'Facilities:',
-              style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(packageFacilities),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ElevatedButton(
-          onPressed: () {
-            // Handle the checkout process, maybe navigate to payment page
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Proceeding to Payment')));
-          },
-          child: const Text('Proceed to Payment'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            padding: const EdgeInsets.symmetric(vertical: 15),
-          ),
-        ),
-      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator(color: Colors.blueAccent))
+          : WebViewWidget(controller: _controller),
     );
   }
 }

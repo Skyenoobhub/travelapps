@@ -228,7 +228,7 @@ class _RegisterPageState extends State<RegisterPage> {
         passwordController.text.isEmpty ||
         phoneController.text.isEmpty ||
         gender == null) {
-      _showDialog('Error', 'Semua field harus diisi.');
+      _showDialog('Error', 'Harap isi semua data.');
       return;
     }
 
@@ -256,7 +256,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _showDialog('Gagal', responseBody['message']);
       }
     } catch (e) {
-      _showDialog('Error', 'Gagal mendaftar. Silakan coba lagi.');
+      _showDialog('Error', 'Gagal mendaftar. Silakan coba lagi!');
     }
   }
 

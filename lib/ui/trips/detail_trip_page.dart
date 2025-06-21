@@ -1,14 +1,14 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, use_build_context_synchronously, prefer_const_constructors_in_immutables, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:travelapp/ui/payment/checkout.dart';
 import 'dart:convert';
+import 'package:travelapp/ui/payment/checkout.dart';
 
 class DetailTripPage extends StatefulWidget {
   final String packageId;
 
-  DetailTripPage({super.key, required this.packageId});
+  const DetailTripPage({super.key, required this.packageId});
 
   @override
   State<DetailTripPage> createState() => _DetailTripPageState();
@@ -62,7 +62,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
           final data = snapshot.data!;
           final imageUrl = data['foto'] != null
               ? 'http://10.0.2.2/backend/uploads/${data['foto']}'
-              : 'https://via.placeholder.com/250';
+              : 'http://via.placeholder.com/250';
 
           final List<String> sections = [
             data['deskripsi'] ?? 'Tidak ada deskripsi',
@@ -102,7 +102,6 @@ class _DetailTripPageState extends State<DetailTripPage> {
                               ),
                             ),
                           ),
-                          // Ganti ikon menjadi ikon informasi
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.blueAccent.withOpacity(0.1),
@@ -116,7 +115,6 @@ class _DetailTripPageState extends State<DetailTripPage> {
                       const Divider(color: Colors.blueAccent, thickness: 2),
                       const SizedBox(height: 16),
 
-                      /// Tombol Navigasi Horizontal
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(3, (index) {
@@ -150,7 +148,6 @@ class _DetailTripPageState extends State<DetailTripPage> {
 
                       const SizedBox(height: 20),
 
-                      /// Konten Dengan Transisi Halus
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         transitionBuilder: (child, animation) => FadeTransition(
@@ -190,7 +187,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                 ),
               ),
 
-              /// Bottom Bar Pesan
+              /// Bottom Button
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -229,18 +226,19 @@ class _DetailTripPageState extends State<DetailTripPage> {
                                   packagePrice: data['harga'] ?? '0',
                                   packageDescription: data['deskripsi'] ?? '',
                                   packageItinerary: data['rincian'] ?? '',
-                                  packageFacilities: data['fasilitas'] ?? '',
+                                  packageFacilities: data['fasilitas'] ?? '', userName: '',
                                 ),
                               ),
                             );
                           },
-                          icon: const Icon(Icons.shopping_cart_checkout, size: 16),
-                          label: const Text("Pesan", style: TextStyle(fontSize: 14)),
+                          icon: const Icon(Icons.shopping_cart, color: Colors.white, size: 16),
+                          label: const Text("Pesan Sekarang", style: TextStyle(fontSize: 13, color: Colors.white)),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            elevation: 2,
+                            backgroundColor: Colors.orangeAccent,
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                            elevation: 3,
+                            minimumSize: Size(120, 36), // kecil dan compact
                           ),
                         ),
                       )

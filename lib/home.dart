@@ -1,4 +1,4 @@
-// ignore_for_file: use_super_parameters, prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, prefer_const_declarations
+// ignore_for_file: use_super_parameters, prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, prefer_const_declarations, unused_import
 
 import 'dart:async';
 import 'dart:convert';
@@ -8,6 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:travelapp/ui/profile/profile.dart';
 import 'package:travelapp/ui/trips/detail_trip_page.dart';
 import 'package:travelapp/ui/trips/trips.dart';
+import 'package:travelapp/ui/payment/checkout.dart'; //
+import 'package:travelapp/ui/payment/history_page.dart';
+
 
 class HomePage extends StatelessWidget {
   final String userName;
@@ -55,7 +58,17 @@ class HomePage extends StatelessWidget {
                 Text(today, style: TextStyle(color: Colors.black)),
               ],
             ),
-            Icon(Icons.shopping_cart, color: Colors.blue),
+            IconButton(
+  icon: Icon(Icons.shopping_cart, color: Colors.blue),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HistoryPage(userName: userName),
+      ),
+    );
+  },
+),
           ],
         ),
       ),
@@ -81,6 +94,7 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
 
 class ExploreContent extends StatefulWidget {
   final String userName;
