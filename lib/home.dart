@@ -376,8 +376,8 @@ class _ExploreContentState extends State<ExploreContent> {
         margin: EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16), // sudut lebih membulat tapi tetap kotak
-          border: Border.all(color: Colors.grey.shade300, width: 1), // border tipis estetik
+          borderRadius: BorderRadius.circular(16), 
+          border: Border.all(color: Colors.grey.shade300, width: 1), 
           // tanpa shadow agar clean dan minimalis
         ),
         child: Column(

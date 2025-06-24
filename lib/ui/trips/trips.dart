@@ -150,7 +150,7 @@ class _OpenTripPageState extends State<OpenTripPage> {
                   ),
                   SizedBox(height: 6),
                   Text(
-                    'Bersama PT Jalan Dulu Asia – Teman Liburan Terbaikmu!',
+                    'Bersama PT Denar Pesona – Membuat Liburan Lebih Mempesona!',
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.blueAccent,

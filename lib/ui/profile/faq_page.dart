@@ -9,25 +9,25 @@ class FAQPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final faqs = [
       {
-        "question": "Apa itu Open Trip?",
+        "question": "Apa itu paket wisata open trip?",
         "answer":
-            "Open Trip adalah layanan perjalanan yang dapat diikuti oleh siapa saja tanpa harus mengumpulkan kelompok sendiri."
+            "Open trip adalah paket wisata gabungan di mana peserta dari berbagai kalangan bisa ikut dalam satu perjalanan wisata tanpa harus membentuk kelompok sendiri."
       },
       {
-        "question": "Di daerah mana PT Jalan Dulu Asia?",
+        "question": "Apa keuntungan ikut open trip dibanding wisata pribadi?",
         "answer":
-            "PT Jalan Dulu Asia beroperasi di berbagai daerah di Indonesia, terutama di tempat-tempat wisata populer."
+            "Biaya lebih murah karena ditanggung bersama, bertemu teman baru, dan itinerary sudah disiapkan oleh penyelenggara."
       },
       {
-        "question": "Siapa saja yang bisa menggunakan jasa Open Trip?",
+        "question": "Bagaimana cara mengetahui detail lengkap dari open trip?",
         "answer":
-            "Siapapun bisa menggunakan jasa Open Trip, baik individu, keluarga, maupun kelompok kecil."
+            "Detail lengkap tersedia di menu trips pada aplikasi."
       },
       {
         "question":
-            "Apa yang membedakan PT Jalan Dulu Asia dari kompetitor lain di industri yang sama?",
+            "Apa yang harus dibawa saat mengikuti open trip?",
         "answer":
-            "PT Jalan Dulu Asia menawarkan pengalaman perjalanan yang unik dengan fokus pada kenyamanan dan pengalaman lokal."
+            "Dokumen pribadi (KTP/paspor), pakaian sesuai cuaca, obat pribadi, uang tunai secukupnya"
       },
     ];
 

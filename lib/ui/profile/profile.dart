@@ -63,7 +63,7 @@ class ProfilePage extends StatelessWidget {
             _buildSectionTitle('Bantuan', Icons.help_outline),
             _buildSettingItem(context, 'Pertanyaan Umum', Icons.live_help_rounded, FAQPage()),
             _divider(),
-            _buildSettingItem(context, 'Tentang', Icons.info_outline, AboutPage()), // ← Tambahan
+            _buildSettingItem(context, 'Tentang', Icons.info_outline, AboutPage()), 
             SizedBox(height: 30),
           ],
         ),
@@ -104,7 +104,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "Selamat datang kembali!",
+                  "Selamat Datang Kembali!",
                   style: TextStyle(color: Colors.grey.shade700),
                 ),
               ],

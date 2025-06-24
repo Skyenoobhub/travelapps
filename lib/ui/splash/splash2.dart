@@ -102,7 +102,7 @@ class _SplashScreen2State extends State<SplashScreen2> {
 
               // Teks di bagian bawah
               const Text(
-                'Yuk Jalan Dulu Aja',
+                'Membuat Perjalanan Lebih Mempesona',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white70,

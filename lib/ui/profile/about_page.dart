@@ -34,8 +34,8 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'PT. Jalan Dulu Asia berdiri pada tahun 2018. Perusahaan kami menyediakan kebutuhan yang berhubungan dengan jasa pariwisata yaitu wisata Kota Bandung.\n\n'
-              'Kami memberikan layanan berkualitas dengan didukung oleh tenaga muda handal serta profesional yang menjadikan perjalanan anda lebih menyenangkan dan mendapatkan pengalaman berlibur yang berkesan.',
+              'PT Denar Pesona adalah biro perjalanan wisata yang menghadirkan pengalaman liburan hemat dan menyenangkan melalui layanan open trip. Kami menghubungkan para pelancong dari berbagai latar belakang untuk menikmati perjalanan bersama, tanpa repot mengatur semuanya sendiri.\n\n'
+              'Kami hadir di aplikasi ini untuk memudahkan Anda menjelajahi Indonesia—cukup klik, pesan, dan berangkat!',
               style: TextStyle(fontSize: 16, height: 1.5),
               textAlign: TextAlign.justify,
             ),

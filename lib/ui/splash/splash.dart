@@ -64,7 +64,7 @@ class _SplashState extends State<SplashScreen> {
               const Padding(
                 padding: EdgeInsets.only(bottom: 30.0),
                 child: Text(
-                  'Yuk Jalan Dulu Aja',
+                  'Membuat Perjalanan Lebih Mempesona',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
