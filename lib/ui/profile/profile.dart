@@ -6,7 +6,8 @@ import 'package:travelapp/ui/login/login.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 import 'biodata.dart';
 import 'faq_page.dart';
-import 'about_page.dart'; // ← Tambahan
+import 'about_page.dart';
+import 'favorit_saya_page.dart'; //
 
 class ProfilePage extends StatelessWidget {
   final String userName;
@@ -59,11 +60,12 @@ class ProfilePage extends StatelessWidget {
             _divider(),
             _buildSectionTitle('Umum', Icons.settings),
             _buildSettingItem(context, 'Biodata', Icons.account_box_rounded, BiodataPage(userId: userName)),
+            _buildSettingItem(context, 'Favorit Saya', Icons.favorite, FavoritSayaPage()),
             _divider(),
             _buildSectionTitle('Bantuan', Icons.help_outline),
             _buildSettingItem(context, 'Pertanyaan Umum', Icons.live_help_rounded, FAQPage()),
             _divider(),
-            _buildSettingItem(context, 'Tentang', Icons.info_outline, AboutPage()), 
+            _buildSettingItem(context, 'Tentang', Icons.info_outline, AboutPage()),
             SizedBox(height: 30),
           ],
         ),

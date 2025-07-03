@@ -19,6 +19,7 @@ class OpenTripPage extends StatefulWidget {
 class _OpenTripPageState extends State<OpenTripPage> {
   List<Map<String, dynamic>> allTrips = [];
   List<Map<String, dynamic>> filteredTrips = [];
+  Set<String> likedTrips = {}; // ID trip yang disukai
   final TextEditingController _searchController = TextEditingController();
 
   void _navigateToPage(int index, BuildContext context) {
@@ -39,6 +40,7 @@ class _OpenTripPageState extends State<OpenTripPage> {
   void initState() {
     super.initState();
     _fetchTrips();
+    _fetchFavorites();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -74,6 +76,52 @@ class _OpenTripPageState extends State<OpenTripPage> {
       }
     } catch (e) {
       print("Error: $e");
+    }
+  }
+
+  Future<void> _fetchFavorites() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2/backend/get_favorit.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'nama_user': widget.userName}),
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final ids = List<String>.from(data['trip_ids'].map((id) => id.toString()));
+        setState(() {
+          likedTrips = ids.toSet();
+        });
+      }
+    } catch (e) {
+      print("Error loading favorites: $e");
+    }
+  }
+
+  Future<void> _toggleFavorite(String id) async {
+    final isLiked = likedTrips.contains(id);
+    setState(() {
+      if (isLiked) {
+        likedTrips.remove(id);
+      } else {
+        likedTrips.add(id);
+      }
+    });
+
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2/backend/favorit.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'nama_user': widget.userName,
+        'trip_id': id,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      print('Status favorit: ${result['status']}');
+    } else {
+      print('Gagal update favorit');
     }
   }
 
@@ -258,6 +306,8 @@ class _OpenTripPageState extends State<OpenTripPage> {
     required String imageUrl,
     required BuildContext context,
   }) {
+    final isLiked = likedTrips.contains(id);
+
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -276,17 +326,37 @@ class _OpenTripPageState extends State<OpenTripPage> {
           children: [
             Expanded(
               flex: 5,
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
-                    child: Icon(Icons.image_not_supported, size: 30),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey[300],
+                        child: Icon(Icons.image_not_supported, size: 30),
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: GestureDetector(
+                      onTap: () => _toggleFavorite(id),
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.white70,
+                        child: Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          color: isLiked ? Colors.red : Colors.grey,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
