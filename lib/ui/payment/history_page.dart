@@ -99,7 +99,8 @@ class _HistoryPageState extends State<HistoryPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => DetailTripPage(packageId: trip['id'].toString()),
+            builder: (_) =>
+                DetailTripPage(packageId: (trip['trip_id'] ?? trip['id']).toString()),
           ),
         );
       },
