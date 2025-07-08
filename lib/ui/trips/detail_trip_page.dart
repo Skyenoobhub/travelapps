@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:travelapp/ui/payment/checkout.dart';
+import 'package:travelapp/ui/payment/history_page.dart';
 
 class DetailTripPage extends StatefulWidget {
   final String packageId;
@@ -16,6 +17,7 @@ class DetailTripPage extends StatefulWidget {
 
 class _DetailTripPageState extends State<DetailTripPage> {
   int _selectedIndex = 0;
+  bool isFavorited = false;
 
   Future<Map<String, dynamic>> fetchPackageDetails() async {
     final response = await http.get(
@@ -27,6 +29,53 @@ class _DetailTripPageState extends State<DetailTripPage> {
       return data;
     } else {
       throw Exception('Gagal memuat data');
+    }
+  }
+
+  Future<void> toggleFavorite() async {
+    final url = Uri.parse('http://10.0.2.2/backend/add_favorit.php');
+    final response = await http.post(
+      url,
+      body: {'trip_id': widget.packageId},
+    );
+
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      if (result['success']) {
+        setState(() => isFavorited = !isFavorited);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(isFavorited ? 'Ditambahkan ke favorit' : 'Dihapus dari favorit')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal memperbarui favorit')));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Koneksi gagal')));
+    }
+  }
+
+  Future<void> addToHistory() async {
+    final url = Uri.parse('http://10.0.2.2/backend/add_history.php');
+    final response = await http.post(
+      url,
+      body: {'trip_id': widget.packageId},
+    );
+
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      if (result['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ditambahkan ke riwayat transaksi')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menambahkan riwayat')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Koneksi gagal')),
+      );
     }
   }
 
@@ -79,14 +128,32 @@ class _DetailTripPageState extends State<DetailTripPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          imageUrl,
-                          height: 240,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              imageUrl,
+                              height: 240,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 12,
+                            right: 12,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white.withOpacity(0.9),
+                              child: IconButton(
+                                onPressed: toggleFavorite,
+                                icon: Icon(
+                                  isFavorited ? Icons.favorite : Icons.favorite_border,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -107,14 +174,24 @@ class _DetailTripPageState extends State<DetailTripPage> {
                               color: Colors.blueAccent.withOpacity(0.1),
                               shape: BoxShape.circle,
                             ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(Icons.info_outline, color: Colors.blueAccent),
+                            padding: const EdgeInsets.all(4),
+                            child: IconButton(
+                              icon: Icon(Icons.info_outline, color: Colors.blueAccent),
+                              onPressed: () async {
+                                await addToHistory();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HistoryPage(), // ✅ Tanpa userName
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),
                       const Divider(color: Colors.blueAccent, thickness: 2),
                       const SizedBox(height: 16),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(3, (index) {
@@ -145,9 +222,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                           );
                         }),
                       ),
-
                       const SizedBox(height: 20),
-
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         transitionBuilder: (child, animation) => FadeTransition(
@@ -180,7 +255,6 @@ class _DetailTripPageState extends State<DetailTripPage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -226,7 +300,8 @@ class _DetailTripPageState extends State<DetailTripPage> {
                                   packagePrice: data['harga'] ?? '0',
                                   packageDescription: data['deskripsi'] ?? '',
                                   packageItinerary: data['rincian'] ?? '',
-                                  packageFacilities: data['fasilitas'] ?? '', userName: '',
+                                  packageFacilities: data['fasilitas'] ?? '',
+                                  userName: '',
                                 ),
                               ),
                             );
@@ -238,7 +313,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                             elevation: 3,
-                            minimumSize: Size(120, 36), // kecil dan compact
+                            minimumSize: Size(120, 36),
                           ),
                         ),
                       )

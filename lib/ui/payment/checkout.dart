@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:travelapp/ui/payment/history_page.dart'; // pastikan path ini sesuai
+import 'package:travelapp/ui/payment/history_page.dart';
 
 class CheckoutPage extends StatefulWidget {
   final String packageName;
@@ -12,7 +12,7 @@ class CheckoutPage extends StatefulWidget {
   final String packageDescription;
   final String packageItinerary;
   final String packageFacilities;
-  final String userName; // ← Tambahan
+  final String userName;
 
   const CheckoutPage({
     super.key,
@@ -21,7 +21,7 @@ class CheckoutPage extends StatefulWidget {
     required this.packageDescription,
     required this.packageItinerary,
     required this.packageFacilities,
-    required this.userName, // ← Tambahan
+    required this.userName,
   });
 
   @override
@@ -47,10 +47,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
               print("✅ Transaksi sukses terdeteksi");
               await simpanDetailTransaksi();
 
+              // ⛔️ HILANGKAN userName dari HistoryPage (tanpa error)
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HistoryPage(userName: widget.userName),
+                  builder: (context) => const HistoryPage(), // ← Tidak kirim userName
                 ),
               );
             } else if (url.contains("error") || url.contains("transaction_status=deny")) {
@@ -72,7 +73,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       'deskripsi': widget.packageDescription,
       'rincian': widget.packageItinerary,
       'fasilitas': widget.packageFacilities,
-      'nama_user': widget.userName, // ← Gunakan user dari parameter
+      'nama_user': widget.userName,
     });
 
     final result = json.decode(response.body);
@@ -103,7 +104,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       'deskripsi': widget.packageDescription,
       'rincian': widget.packageItinerary,
       'fasilitas': widget.packageFacilities,
-      'nama_user': widget.userName, // ← Gunakan user dari parameter
+      'nama_user': widget.userName,
     };
 
     print("📤 Mengirim data ke database: $body");

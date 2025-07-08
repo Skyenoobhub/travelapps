@@ -8,9 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:travelapp/ui/profile/profile.dart';
 import 'package:travelapp/ui/trips/detail_trip_page.dart';
 import 'package:travelapp/ui/trips/trips.dart';
-import 'package:travelapp/ui/payment/checkout.dart'; //
-import 'package:travelapp/ui/payment/history_page.dart';
-
+import 'package:travelapp/ui/payment/checkout.dart';
 
 class HomePage extends StatelessWidget {
   final String userName;
@@ -51,6 +49,7 @@ class HomePage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Tanggal hari ini
             Row(
               children: [
                 Icon(Icons.public, color: Colors.blue),
@@ -58,17 +57,15 @@ class HomePage extends StatelessWidget {
                 Text(today, style: TextStyle(color: Colors.black)),
               ],
             ),
-            IconButton(
-  icon: Icon(Icons.shopping_cart, color: Colors.blue),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HistoryPage(userName: userName),
-      ),
-    );
-  },
-),
+            Row(
+              children: [
+                Text("TripShare",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16)),
+              ],
+            ),
           ],
         ),
       ),
@@ -94,8 +91,6 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
 class ExploreContent extends StatefulWidget {
   final String userName;
   const ExploreContent({Key? key, required this.userName}) : super(key: key);
@@ -376,9 +371,8 @@ class _ExploreContentState extends State<ExploreContent> {
         margin: EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16), 
-          border: Border.all(color: Colors.grey.shade300, width: 1), 
-          // tanpa shadow agar clean dan minimalis
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade300, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

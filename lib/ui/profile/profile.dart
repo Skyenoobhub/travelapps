@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:travelapp/home.dart';
 import 'package:travelapp/ui/login/login.dart';
 import 'package:travelapp/ui/trips/trips.dart';
-import 'biodata.dart';
-import 'faq_page.dart';
-import 'about_page.dart';
-import 'favorit_saya_page.dart'; //
+import 'package:travelapp/ui/profile/biodata.dart';
+import 'package:travelapp/ui/profile/faq_page.dart';
+import 'package:travelapp/ui/profile/about_page.dart';
+import 'package:travelapp/ui/profile/favorit_saya_page.dart';
+import 'package:travelapp/ui/payment/history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userName;
@@ -61,6 +62,7 @@ class ProfilePage extends StatelessWidget {
             _buildSectionTitle('Umum', Icons.settings),
             _buildSettingItem(context, 'Biodata', Icons.account_box_rounded, BiodataPage(userId: userName)),
             _buildSettingItem(context, 'Favorit Saya', Icons.favorite, FavoritSayaPage()),
+            _buildSettingItem(context, 'Riwayat Pemesanan', Icons.history, const HistoryPage()), // ✅ tanpa userName
             _divider(),
             _buildSectionTitle('Bantuan', Icons.help_outline),
             _buildSettingItem(context, 'Pertanyaan Umum', Icons.live_help_rounded, FAQPage()),
