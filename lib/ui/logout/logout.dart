@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              _showLogoutDialog(context);  // Show the logout dialog
+              _showLogoutDialog(context); 
             },
           ),
         ],
@@ -33,7 +33,6 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Other list tiles for settings...
             ],
           ),
         ),
@@ -74,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();  // Close the dialog without logging out
+                        Navigator.of(context).pop(); 
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -92,8 +91,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();  // Close the dialog and perform logout
-                        // Add logout functionality here
+                        Navigator.of(context).pop(); 
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,

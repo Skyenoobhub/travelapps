@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1976D2), // 💙 Warna biru estetik
+          backgroundColor: const Color(0xFF1976D2), 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

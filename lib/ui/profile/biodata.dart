@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class BiodataPage extends StatefulWidget {
-  final String userId; // userId dari halaman sebelumnya
+  final String userId;
 
   const BiodataPage({super.key, required this.userId});
 

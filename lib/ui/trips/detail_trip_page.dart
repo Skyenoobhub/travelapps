@@ -8,7 +8,6 @@ import 'package:travelapp/ui/payment/history_page.dart';
 
 class DetailTripPage extends StatefulWidget {
   final String packageId;
-
   const DetailTripPage({super.key, required this.packageId});
 
   @override
@@ -182,7 +181,7 @@ class _DetailTripPageState extends State<DetailTripPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const HistoryPage(), // ✅ Tanpa userName
+                                    builder: (context) => const HistoryPage(), 
                                   ),
                                 );
                               },

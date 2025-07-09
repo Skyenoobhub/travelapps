@@ -47,11 +47,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
               print("✅ Transaksi sukses terdeteksi");
               await simpanDetailTransaksi();
 
-              // ⛔️ HILANGKAN userName dari HistoryPage (tanpa error)
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HistoryPage(), // ← Tidak kirim userName
+                  builder: (context) => const HistoryPage(),
                 ),
               );
             } else if (url.contains("error") || url.contains("transaction_status=deny")) {

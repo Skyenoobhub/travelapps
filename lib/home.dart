@@ -508,7 +508,6 @@ class NewsDetailPage extends StatelessWidget {
             SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () {
-                // Implementasikan url_launcher di sini jika dibutuhkan
               },
               icon: Icon(Icons.open_in_browser),
               label: Text("Buka Sumber"),

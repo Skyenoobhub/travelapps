@@ -35,7 +35,7 @@ class _SplashState extends State<SplashScreen> {
         ),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Spacer(flex: 2),
 
