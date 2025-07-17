@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:travelapp/ui/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:travelapp/ui/splash/splash.dart';
+import 'package:travelapp/ui/splash/main_guest_screen.dart';
+import 'package:travelapp/ui/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('id' , null); 
+  await initializeDateFormatting('id', null); 
   runApp(MyApp());
 }
 
@@ -16,12 +18,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TripShare',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),           // Splash awal
+        '/main_guest': (context) => const MainGuestScreen(), // Halaman guest trip
+        '/login': (context) => const LoginPage(),         // Halaman login
+      },
     );
   }
 }

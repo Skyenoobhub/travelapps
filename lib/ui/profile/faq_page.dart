@@ -20,14 +20,12 @@ class FAQPage extends StatelessWidget {
       },
       {
         "question": "Bagaimana cara mengetahui detail lengkap dari open trip?",
-        "answer":
-            "Detail lengkap tersedia di menu trips pada aplikasi."
+        "answer": "Detail lengkap tersedia di menu trips pada aplikasi."
       },
       {
-        "question":
-            "Apa yang harus dibawa saat mengikuti open trip?",
+        "question": "Bagaimana jika ingin membatalkan perjalanan atau proses refund?",
         "answer":
-            "Dokumen pribadi (KTP/paspor), pakaian sesuai cuaca, obat pribadi, uang tunai secukupnya"
+            "Proses pembatalan perjalanan atau refund bisa dilakukan sesuai dengan ketentuan yang berlaku, cukup hubungi layanan pelanggan kami"
       },
     ];
 
@@ -44,13 +42,55 @@ class FAQPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: ListView.separated(
-          itemCount: faqs.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final faq = faqs[index];
-            return _buildFAQItem(faq["question"]!, faq["answer"]!);
-          },
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                itemCount: faqs.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final faq = faqs[index];
+                  return _buildFAQItem(faq["question"]!, faq["answer"]!);
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                const Text(
+                  'Butuh Bantuan?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // Ganti ini dengan fungsi navigasi atau chat CS
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Menghubungi customer service...'),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.support_agent),
+                  label: const Text('Hubungi CS'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

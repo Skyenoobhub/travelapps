@@ -10,6 +10,7 @@ import 'package:travelapp/ui/trips/detail_trip_page.dart';
 import 'package:travelapp/ui/trips/trips.dart';
 import 'package:travelapp/ui/payment/checkout.dart';
 
+
 class HomePage extends StatelessWidget {
   final String userName;
 

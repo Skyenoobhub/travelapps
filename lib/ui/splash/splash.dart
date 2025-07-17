@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:travelapp/ui/splash/splash2.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,10 +13,13 @@ class _SplashState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5)).then((value) => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SplashScreen2()),
-        ));
+
+    // Jalankan navigasi setelah frame pertama selesai di-render
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 5), () {
+        Navigator.pushReplacementNamed(context, '/main_guest');
+      });
+    });
   }
 
   @override
