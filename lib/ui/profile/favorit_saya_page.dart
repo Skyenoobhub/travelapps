@@ -203,6 +203,7 @@ class _FavoritSayaPageState extends State<FavoritSayaPage> {
             ),
           ),
         ),
+
         Positioned(
           top: 6,
           right: 6,
@@ -213,6 +214,16 @@ class _FavoritSayaPageState extends State<FavoritSayaPage> {
               icon: Icon(Icons.delete, size: 16, color: Colors.white),
               onPressed: () => _hapusFavorit(tripId),
             ),
+          ),
+        ),
+
+        Positioned(
+          top: 6,
+          left: 6,
+          child: CircleAvatar(
+            radius: 16,
+            backgroundColor: Colors.white,
+            child: Icon(Icons.favorite, size: 16, color: Colors.redAccent),
           ),
         ),
       ],
