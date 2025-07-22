@@ -9,23 +9,27 @@ class FAQPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final faqs = [
       {
-        "question": "Apa itu paket wisata open trip?",
+        "question": "Bagaimana cara mendaftar di Tripshare?",
         "answer":
-            "Open trip adalah paket wisata gabungan di mana peserta dari berbagai kalangan bisa ikut dalam satu perjalanan wisata tanpa harus membentuk kelompok sendiri."
+            "Cukup buka aplikasi, lalu pilih menu Daftar. Isi data diri Anda dengan lengkap dan aplikasi dapat digunakan."
       },
       {
-        "question": "Apa keuntungan ikut open trip dibanding wisata pribadi?",
+        "question": "Bagaimana cara memesan trip?",
         "answer":
-            "Biaya lebih murah karena ditanggung bersama, bertemu teman baru, dan itinerary sudah disiapkan oleh penyelenggara."
+            "Pilih paket trip yang tersedia, klik Pesan Sekarang, lalu ikuti langkah pemesanan hingga proses pembayaran selesai."
       },
       {
-        "question": "Bagaimana cara mengetahui detail lengkap dari open trip?",
-        "answer": "Detail lengkap tersedia di menu trips pada aplikasi."
+        "question": "Bagaimana alur pembayaran di Tripshare?",
+        "answer": "Setelah memilih trip, Anda akan diarahkan ke halaman pembayaran melalui Midtrans. Pilih metode pembayaran (transfer bank, e-wallet, dll), lalu selesaikan pembayaran sesuai instruksi."
       },
       {
-        "question": "Bagaimana jika ingin membatalkan perjalanan atau proses refund?",
+        "question": "Apakah saya bisa mendapatkan refund jika membatalkan trip atau terjadi pembatalan karena cuaca ekstrem atau bencana alam ?",
         "answer":
-            "Proses pembatalan perjalanan atau refund bisa dilakukan sesuai dengan ketentuan yang berlaku, cukup hubungi layanan pelanggan kami"
+            "Ya, jika terjadi kondisi darurat seperti cuaca buruk, banjir, atau longsor yang membuat trip tidak dapat dilaksanakan, pengguna berhak mengajukan refund atau penjadwalan ulang sesuai kebijakan PT. Denar Pesona."
+      },
+      {
+        "question": "Syarat proses refund?",
+        "answer": "Pengajuan maksimal 3×24 jam setelah pengumuman pembatalan, Sertakan bukti pemesanan dan alasan pembatalan, Proses refund maksimal 7 hari kerja dan Refund berupa dana kembali atau penjadwalan ulang, sesuai kebijakan PT. Denar Pesona."
       },
     ];
 
